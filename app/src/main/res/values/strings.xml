@@ -18,6 +18,7 @@
     <string name="converter_decimal">Decimal</string>
     <string name="converter_delete">Delete</string>
     <string name="converter_clear">Clear</string>
+    <string name="converter_toggle_sign">Toggle sign</string>
     <string name="length_unit_millimeter">Millimeter</string>
     <string name="length_unit_centimeter">Centimeter</string>
     <string name="length_unit_meter">Meter</string>
@@ -32,4 +33,7 @@
     <string name="mass_unit_ounce">Ounce</string>
     <string name="mass_unit_pound">Pound</string>
     <string name="mass_unit_stone">Stone</string>
+    <string name="temperature_unit_celsius">Celsius</string>
+    <string name="temperature_unit_fahrenheit">Fahrenheit</string>
+    <string name="temperature_unit_kelvin">Kelvin</string>
 </resources>

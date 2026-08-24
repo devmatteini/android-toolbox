@@ -100,7 +100,7 @@
 - Add tests for metric and imperial mass conversions.
 - Verify mass conversion offline.
 
-## 6. Add Temperature Converter
+## 6. Add Temperature Converter (Done)
 
 - Add `ConverterCategory.Temperature`.
 - Add Celsius, Fahrenheit, and Kelvin units.

@@ -18,6 +18,7 @@ import com.cosimomatteini.toolbox.ui.HomeScreen
 import com.cosimomatteini.toolbox.ui.HomeViewModel
 import com.cosimomatteini.toolbox.ui.LengthScreen
 import com.cosimomatteini.toolbox.ui.MassScreen
+import com.cosimomatteini.toolbox.ui.TemperatureScreen
 import com.cosimomatteini.toolbox.ui.theme.ToolboxTheme
 
 class MainActivity : ComponentActivity() {
@@ -46,6 +47,7 @@ class MainActivity : ComponentActivity() {
                                 screen = when (tool.id) {
                                     ToolId.Length -> AppScreen.Length
                                     ToolId.Mass -> AppScreen.Mass
+                                    ToolId.Temperature -> AppScreen.Temperature
                                     else -> AppScreen.Home
                                 }
                             }
@@ -65,6 +67,13 @@ class MainActivity : ComponentActivity() {
                             onBack = { screen = AppScreen.Home }
                         )
                     }
+
+                    AppScreen.Temperature -> {
+                        TemperatureScreen(
+                            convertTemperature = appContainer.convertTemperature,
+                            onBack = { screen = AppScreen.Home }
+                        )
+                    }
                 }
             }
         }
@@ -74,5 +83,6 @@ class MainActivity : ComponentActivity() {
 private enum class AppScreen {
     Home,
     Length,
-    Mass
+    Mass,
+    Temperature
 }

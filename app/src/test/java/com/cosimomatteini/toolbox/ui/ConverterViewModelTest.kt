@@ -1,7 +1,9 @@
 package com.cosimomatteini.toolbox.ui
 
 import com.cosimomatteini.toolbox.domain.LengthUnit
+import com.cosimomatteini.toolbox.domain.TemperatureUnit
 import com.cosimomatteini.toolbox.domain.convertLength
+import com.cosimomatteini.toolbox.domain.convertTemperature
 import java.util.Locale
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -63,10 +65,29 @@ class ConverterViewModelTest {
         assertEquals("1000", viewModel.uiState.value.targetValue)
     }
 
+    @Test
+    fun `toggle sign converts a temperature source value`() {
+        val viewModel = temperatureViewModel()
+
+        viewModel.onToggleSign()
+        viewModel.onDigit(4)
+        viewModel.onDigit(0)
+
+        assertEquals("-40", viewModel.uiState.value.sourceValue)
+        assertEquals("-40", viewModel.uiState.value.targetValue)
+    }
+
     private fun viewModel(locale: Locale = Locale.US) = ConverterViewModel(
         sourceUnit = LengthUnit.Meter,
         targetUnit = LengthUnit.Kilometer,
         convert = ::convertLength,
         locale = locale
+    )
+
+    private fun temperatureViewModel() = ConverterViewModel(
+        sourceUnit = TemperatureUnit.Celsius,
+        targetUnit = TemperatureUnit.Fahrenheit,
+        convert = ::convertTemperature,
+        locale = Locale.US
     )
 }

@@ -70,6 +70,8 @@ fun <U : ConverterUnit> ConverterScreen(
     onDelete: () -> Unit,
     onClear: () -> Unit,
     onSwap: () -> Unit,
+    showSignToggle: Boolean = false,
+    onToggleSign: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val locale = Locale.getDefault()
@@ -132,7 +134,9 @@ fun <U : ConverterUnit> ConverterScreen(
                 onDecimal = onDecimal,
                 onDelete = onDelete,
                 onClear = onClear,
-                onSwap = onSwap
+                onSwap = onSwap,
+                showSignToggle = showSignToggle,
+                onToggleSign = onToggleSign
             )
         }
     }
@@ -258,12 +262,15 @@ private fun Keypad(
     onDecimal: () -> Unit,
     onDelete: () -> Unit,
     onClear: () -> Unit,
-    onSwap: () -> Unit
+    onSwap: () -> Unit,
+    showSignToggle: Boolean,
+    onToggleSign: () -> Unit
 ) {
     val swapLabel = stringResource(R.string.converter_swap)
     val clearLabel = stringResource(R.string.converter_clear)
     val deleteLabel = stringResource(R.string.converter_delete)
     val decimalLabel = stringResource(R.string.converter_decimal)
+    val signLabel = stringResource(R.string.converter_toggle_sign)
 
     Column(verticalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
         KeypadRow {
@@ -286,7 +293,17 @@ private fun Keypad(
             DigitButton(1, onDigit)
             DigitButton(2, onDigit)
             DigitButton(3, onDigit)
-            Spacer(modifier = Modifier.size(KEYPAD_BUTTON_SIZE))
+            if (showSignToggle) {
+                KeypadButton(
+                    onClick = onToggleSign,
+                    contentDescription = signLabel,
+                    emphasized = true
+                ) {
+                    Text("±", style = MaterialTheme.typography.headlineMedium)
+                }
+            } else {
+                Spacer(modifier = Modifier.size(KEYPAD_BUTTON_SIZE))
+            }
         }
         KeypadRow {
             DigitButton(0, onDigit)

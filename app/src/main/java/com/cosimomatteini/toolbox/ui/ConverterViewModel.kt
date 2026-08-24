@@ -23,7 +23,13 @@ class ConverterViewModel<U : ConverterUnit>(
     fun onDigit(digit: Int) {
         require(digit in 0..9)
         val sourceValue = mutableUiState.value.sourceValue
-        updateSourceValue(if (sourceValue == ZERO) digit.toString() else sourceValue + digit)
+        updateSourceValue(
+            when (sourceValue) {
+                ZERO -> digit.toString()
+                NEGATIVE_ZERO -> "$NEGATIVE_SIGN$digit"
+                else -> sourceValue + digit
+            }
+        )
     }
 
     fun onDecimal() {
@@ -35,11 +41,25 @@ class ConverterViewModel<U : ConverterUnit>(
     }
 
     fun onDelete() {
-        updateSourceValue(mutableUiState.value.sourceValue.dropLast(1).ifEmpty { ZERO })
+        val sourceValue = mutableUiState.value.sourceValue.dropLast(1)
+        val value = sourceValue.takeUnless {
+            it.isEmpty() || it == NEGATIVE_SIGN.toString()
+        } ?: ZERO
+        updateSourceValue(value)
     }
 
     fun onClear() {
         updateSourceValue(ZERO)
+    }
+
+    fun onToggleSign() {
+        val sourceValue = mutableUiState.value.sourceValue
+        val value = if (sourceValue.startsWith(NEGATIVE_SIGN)) {
+            sourceValue.drop(1)
+        } else {
+            "$NEGATIVE_SIGN$sourceValue"
+        }
+        updateSourceValue(value)
     }
 
     fun onSourceUnitSelected(unit: U) {
@@ -78,5 +98,7 @@ class ConverterViewModel<U : ConverterUnit>(
 
     private companion object {
         const val ZERO = "0"
+        const val NEGATIVE_SIGN = '-'
+        const val NEGATIVE_ZERO = "-0"
     }
 }
