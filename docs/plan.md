@@ -163,7 +163,7 @@
 - Add metric and imperial area conversion tests.
 - Verify area conversion offline.
 
-## 10. Add Magnetic-North Compass
+## 10. Add Magnetic-North Compass (Done)
 
 - Add immutable compass heading model.
 - Add pure functions to:

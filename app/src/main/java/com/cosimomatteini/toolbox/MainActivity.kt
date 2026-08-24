@@ -15,6 +15,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.cosimomatteini.toolbox.domain.ToolId
 import com.cosimomatteini.toolbox.ui.AreaScreen
+import com.cosimomatteini.toolbox.ui.CompassScreen
 import com.cosimomatteini.toolbox.ui.HomeScreen
 import com.cosimomatteini.toolbox.ui.HomeViewModel
 import com.cosimomatteini.toolbox.ui.LengthScreen
@@ -25,7 +26,7 @@ import com.cosimomatteini.toolbox.ui.VolumeScreen
 import com.cosimomatteini.toolbox.ui.theme.ToolboxTheme
 
 class MainActivity : ComponentActivity() {
-    private val appContainer = ToolboxAppContainer()
+    private val appContainer by lazy { ToolboxAppContainer(applicationContext) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +55,7 @@ class MainActivity : ComponentActivity() {
                                     ToolId.Temperature -> AppScreen.Temperature
                                     ToolId.Speed -> AppScreen.Speed
                                     ToolId.Volume -> AppScreen.Volume
-                                    else -> AppScreen.Home
+                                    ToolId.Compass -> AppScreen.Compass
                                 }
                             }
                         )
@@ -63,6 +64,13 @@ class MainActivity : ComponentActivity() {
                     AppScreen.Area -> {
                         AreaScreen(
                             convertArea = appContainer.convertArea,
+                            onBack = { screen = AppScreen.Home }
+                        )
+                    }
+
+                    AppScreen.Compass -> {
+                        CompassScreen(
+                            observeCompass = appContainer.observeCompass,
                             onBack = { screen = AppScreen.Home }
                         )
                     }
@@ -110,6 +118,7 @@ class MainActivity : ComponentActivity() {
 private enum class AppScreen {
     Home,
     Area,
+    Compass,
     Length,
     Mass,
     Temperature,
