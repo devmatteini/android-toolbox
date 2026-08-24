@@ -40,4 +40,11 @@
     <string name="speed_unit_kilometers_per_hour">Chilometri orari</string>
     <string name="speed_unit_feet_per_second">Piedi al secondo</string>
     <string name="speed_unit_miles_per_hour">Miglia orarie</string>
+    <string name="volume_unit_millilitre">Millilitro</string>
+    <string name="volume_unit_litre">Litro</string>
+    <string name="volume_unit_cubic_meter">Metro cubo</string>
+    <string name="volume_unit_fluid_ounce">Oncia fluida</string>
+    <string name="volume_unit_pint">Pinta</string>
+    <string name="volume_unit_quart">Quarto</string>
+    <string name="volume_unit_imperial_gallon">Gallone imperiale</string>
 </resources>

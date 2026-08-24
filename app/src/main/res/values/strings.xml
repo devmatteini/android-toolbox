@@ -40,4 +40,11 @@
     <string name="speed_unit_kilometers_per_hour">Kilometers per hour</string>
     <string name="speed_unit_feet_per_second">Feet per second</string>
     <string name="speed_unit_miles_per_hour">Miles per hour</string>
+    <string name="volume_unit_millilitre">Millilitre</string>
+    <string name="volume_unit_litre">Litre</string>
+    <string name="volume_unit_cubic_meter">Cubic meter</string>
+    <string name="volume_unit_fluid_ounce">Fluid ounce</string>
+    <string name="volume_unit_pint">Pint</string>
+    <string name="volume_unit_quart">Quart</string>
+    <string name="volume_unit_imperial_gallon">Imperial gallon</string>
 </resources>

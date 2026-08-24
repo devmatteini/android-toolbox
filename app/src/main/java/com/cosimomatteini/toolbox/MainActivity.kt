@@ -20,6 +20,7 @@ import com.cosimomatteini.toolbox.ui.LengthScreen
 import com.cosimomatteini.toolbox.ui.MassScreen
 import com.cosimomatteini.toolbox.ui.SpeedScreen
 import com.cosimomatteini.toolbox.ui.TemperatureScreen
+import com.cosimomatteini.toolbox.ui.VolumeScreen
 import com.cosimomatteini.toolbox.ui.theme.ToolboxTheme
 
 class MainActivity : ComponentActivity() {
@@ -50,6 +51,7 @@ class MainActivity : ComponentActivity() {
                                     ToolId.Mass -> AppScreen.Mass
                                     ToolId.Temperature -> AppScreen.Temperature
                                     ToolId.Speed -> AppScreen.Speed
+                                    ToolId.Volume -> AppScreen.Volume
                                     else -> AppScreen.Home
                                 }
                             }
@@ -83,6 +85,13 @@ class MainActivity : ComponentActivity() {
                             onBack = { screen = AppScreen.Home }
                         )
                     }
+
+                    AppScreen.Volume -> {
+                        VolumeScreen(
+                            convertVolume = appContainer.convertVolume,
+                            onBack = { screen = AppScreen.Home }
+                        )
+                    }
                 }
             }
         }
@@ -94,5 +103,6 @@ private enum class AppScreen {
     Length,
     Mass,
     Temperature,
-    Speed
+    Speed,
+    Volume
 }
