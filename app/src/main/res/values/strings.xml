@@ -8,4 +8,22 @@
     <string name="tool_volume">Volume</string>
     <string name="tool_area">Area</string>
     <string name="tool_compass">Compass</string>
+    <string name="converter_back">Back</string>
+    <string name="converter_source_unit">From unit</string>
+    <string name="converter_target_unit">To unit</string>
+    <string name="converter_source_value">Value</string>
+    <string name="converter_converted_value">Converted value</string>
+    <string name="converter_equivalence">1 %1$s = %2$s %3$s</string>
+    <string name="converter_swap">Swap units</string>
+    <string name="converter_decimal">Decimal</string>
+    <string name="converter_delete">Delete</string>
+    <string name="converter_clear">Clear</string>
+    <string name="length_unit_millimeter">Millimeter</string>
+    <string name="length_unit_centimeter">Centimeter</string>
+    <string name="length_unit_meter">Meter</string>
+    <string name="length_unit_kilometer">Kilometer</string>
+    <string name="length_unit_inch">Inch</string>
+    <string name="length_unit_foot">Foot</string>
+    <string name="length_unit_yard">Yard</string>
+    <string name="length_unit_mile">Mile</string>
 </resources>

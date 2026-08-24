@@ -48,14 +48,14 @@
 - Add tests for the tool catalog and home UI state.
 - Verify every tool opens from the home screen.
 
-## 4. Add Length Converter
+## 4. Add Length Converter (Done)
 
 - Add `ConverterCategory.Length`.
 - Add immutable `LengthUnit` definitions:
-  - Millimetre.
-  - Centimetre.
-  - Metre.
-  - Kilometre.
+   - Millimeter.
+   - Centimeter.
+   - Meter.
+   - Kilometer.
   - Inch.
   - Foot.
   - Yard.
@@ -81,7 +81,7 @@
 - Make swap exchange units and promote the current converted value to editable input.
 - Add length-specific route wiring.
 - Add tests for all length unit conversions, decimal parsing, formatting, clear, delete, and swap.
-- Verify kilometre-to-mile conversion offline.
+- Verify kilometer-to-mile conversion offline.
 
 ## 5. Add Mass Converter
 
@@ -116,8 +116,8 @@
 
 - Add `ConverterCategory.Speed`.
 - Add speed units:
-  - Metres per second.
-  - Kilometres per hour.
+   - Meters per second.
+   - Kilometers per hour.
   - Feet per second.
   - Miles per hour.
 - Add pure speed conversion definitions.
@@ -133,7 +133,7 @@
 - Add volume units:
   - Millilitre.
   - Litre.
-  - Cubic metre.
+   - Cubic meter.
   - Fluid ounce.
   - Pint.
   - Quart.
@@ -149,9 +149,9 @@
 
 - Add `ConverterCategory.Area`.
 - Add area units:
-  - Square centimetre.
-  - Square metre.
-  - Square kilometre.
+   - Square centimeter.
+   - Square meter.
+   - Square kilometer.
   - Square inch.
   - Square foot.
   - Square yard.

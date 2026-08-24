@@ -8,4 +8,22 @@
     <string name="tool_volume">Volume</string>
     <string name="tool_area">Area</string>
     <string name="tool_compass">Bussola</string>
+    <string name="converter_back">Indietro</string>
+    <string name="converter_source_unit">Unità di partenza</string>
+    <string name="converter_target_unit">Unità di arrivo</string>
+    <string name="converter_source_value">Valore</string>
+    <string name="converter_converted_value">Valore convertito</string>
+    <string name="converter_equivalence">1 %1$s = %2$s %3$s</string>
+    <string name="converter_swap">Scambia unità</string>
+    <string name="converter_decimal">Decimale</string>
+    <string name="converter_delete">Elimina</string>
+    <string name="converter_clear">Cancella</string>
+    <string name="length_unit_millimeter">Millimetro</string>
+    <string name="length_unit_centimeter">Centimetro</string>
+    <string name="length_unit_meter">Metro</string>
+    <string name="length_unit_kilometer">Chilometro</string>
+    <string name="length_unit_inch">Pollice</string>
+    <string name="length_unit_foot">Piede</string>
+    <string name="length_unit_yard">Iarda</string>
+    <string name="length_unit_mile">Miglio</string>
 </resources>

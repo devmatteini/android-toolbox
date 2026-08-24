@@ -2,15 +2,21 @@ package com.cosimomatteini.toolbox
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.cosimomatteini.toolbox.domain.ToolId
 import com.cosimomatteini.toolbox.ui.HomeScreen
 import com.cosimomatteini.toolbox.ui.HomeViewModel
+import com.cosimomatteini.toolbox.ui.LengthScreen
 import com.cosimomatteini.toolbox.ui.theme.ToolboxTheme
 
 class MainActivity : ComponentActivity() {
@@ -21,18 +27,39 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ToolboxTheme {
-                val homeViewModel = viewModel<HomeViewModel>(
-                    factory = viewModelFactory {
-                        initializer { HomeViewModel(appContainer.tools) }
-                    }
-                )
-                val uiState by homeViewModel.uiState.collectAsState()
+                var screen by rememberSaveable { mutableStateOf(AppScreen.Home) }
+                BackHandler(enabled = screen != AppScreen.Home) { screen = AppScreen.Home }
 
-                HomeScreen(
-                    uiState = uiState,
-                    onToolClick = {}
-                )
+                when (screen) {
+                    AppScreen.Home -> {
+                        val homeViewModel = viewModel<HomeViewModel>(
+                            factory = viewModelFactory {
+                                initializer { HomeViewModel(appContainer.tools) }
+                            }
+                        )
+                        val uiState by homeViewModel.uiState.collectAsState()
+
+                        HomeScreen(
+                            uiState = uiState,
+                            onToolClick = { tool ->
+                                if (tool.id == ToolId.Length) screen = AppScreen.Length
+                            }
+                        )
+                    }
+
+                    AppScreen.Length -> {
+                        LengthScreen(
+                            convertLength = appContainer.convertLength,
+                            onBack = { screen = AppScreen.Home }
+                        )
+                    }
+                }
             }
         }
     }
+}
+
+private enum class AppScreen {
+    Home,
+    Length
 }
