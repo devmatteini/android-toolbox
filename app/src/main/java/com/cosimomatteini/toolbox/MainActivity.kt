@@ -18,6 +18,7 @@ import com.cosimomatteini.toolbox.ui.HomeScreen
 import com.cosimomatteini.toolbox.ui.HomeViewModel
 import com.cosimomatteini.toolbox.ui.LengthScreen
 import com.cosimomatteini.toolbox.ui.MassScreen
+import com.cosimomatteini.toolbox.ui.SpeedScreen
 import com.cosimomatteini.toolbox.ui.TemperatureScreen
 import com.cosimomatteini.toolbox.ui.theme.ToolboxTheme
 
@@ -48,6 +49,7 @@ class MainActivity : ComponentActivity() {
                                     ToolId.Length -> AppScreen.Length
                                     ToolId.Mass -> AppScreen.Mass
                                     ToolId.Temperature -> AppScreen.Temperature
+                                    ToolId.Speed -> AppScreen.Speed
                                     else -> AppScreen.Home
                                 }
                             }
@@ -74,6 +76,13 @@ class MainActivity : ComponentActivity() {
                             onBack = { screen = AppScreen.Home }
                         )
                     }
+
+                    AppScreen.Speed -> {
+                        SpeedScreen(
+                            convertSpeed = appContainer.convertSpeed,
+                            onBack = { screen = AppScreen.Home }
+                        )
+                    }
                 }
             }
         }
@@ -84,5 +93,6 @@ private enum class AppScreen {
     Home,
     Length,
     Mass,
-    Temperature
+    Temperature,
+    Speed
 }

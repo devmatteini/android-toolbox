@@ -112,7 +112,7 @@
 - Add tests for freezing point, boiling point, negative values, and Kelvin boundary behavior.
 - Verify temperature conversion offline.
 
-## 7. Add Speed Converter
+## 7. Add Speed Converter (Done)
 
 - Add `ConverterCategory.Speed`.
 - Add speed units:

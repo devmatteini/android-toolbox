@@ -36,4 +36,8 @@
     <string name="temperature_unit_celsius">Celsius</string>
     <string name="temperature_unit_fahrenheit">Fahrenheit</string>
     <string name="temperature_unit_kelvin">Kelvin</string>
+    <string name="speed_unit_meters_per_second">Metri al secondo</string>
+    <string name="speed_unit_kilometers_per_hour">Chilometri orari</string>
+    <string name="speed_unit_feet_per_second">Piedi al secondo</string>
+    <string name="speed_unit_miles_per_hour">Miglia orarie</string>
 </resources>
