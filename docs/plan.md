@@ -83,7 +83,7 @@
 - Add tests for all length unit conversions, decimal parsing, formatting, clear, delete, and swap.
 - Verify kilometer-to-mile conversion offline.
 
-## 5. Add Mass Converter
+## 5. Add Mass Converter (Done)
 
 - Add `ConverterCategory.Mass`.
 - Add mass units:

@@ -17,6 +17,7 @@ import com.cosimomatteini.toolbox.domain.ToolId
 import com.cosimomatteini.toolbox.ui.HomeScreen
 import com.cosimomatteini.toolbox.ui.HomeViewModel
 import com.cosimomatteini.toolbox.ui.LengthScreen
+import com.cosimomatteini.toolbox.ui.MassScreen
 import com.cosimomatteini.toolbox.ui.theme.ToolboxTheme
 
 class MainActivity : ComponentActivity() {
@@ -42,7 +43,11 @@ class MainActivity : ComponentActivity() {
                         HomeScreen(
                             uiState = uiState,
                             onToolClick = { tool ->
-                                if (tool.id == ToolId.Length) screen = AppScreen.Length
+                                screen = when (tool.id) {
+                                    ToolId.Length -> AppScreen.Length
+                                    ToolId.Mass -> AppScreen.Mass
+                                    else -> AppScreen.Home
+                                }
                             }
                         )
                     }
@@ -50,6 +55,13 @@ class MainActivity : ComponentActivity() {
                     AppScreen.Length -> {
                         LengthScreen(
                             convertLength = appContainer.convertLength,
+                            onBack = { screen = AppScreen.Home }
+                        )
+                    }
+
+                    AppScreen.Mass -> {
+                        MassScreen(
+                            convertMass = appContainer.convertMass,
                             onBack = { screen = AppScreen.Home }
                         )
                     }
@@ -61,5 +73,6 @@ class MainActivity : ComponentActivity() {
 
 private enum class AppScreen {
     Home,
-    Length
+    Length,
+    Mass
 }

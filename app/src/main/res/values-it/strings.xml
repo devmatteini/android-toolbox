@@ -26,4 +26,10 @@
     <string name="length_unit_foot">Piede</string>
     <string name="length_unit_yard">Iarda</string>
     <string name="length_unit_mile">Miglio</string>
+    <string name="mass_unit_milligram">Milligrammo</string>
+    <string name="mass_unit_gram">Grammo</string>
+    <string name="mass_unit_kilogram">Chilogrammo</string>
+    <string name="mass_unit_ounce">Oncia</string>
+    <string name="mass_unit_pound">Libbra</string>
+    <string name="mass_unit_stone">Stone</string>
 </resources>

@@ -26,4 +26,10 @@
     <string name="length_unit_foot">Foot</string>
     <string name="length_unit_yard">Yard</string>
     <string name="length_unit_mile">Mile</string>
+    <string name="mass_unit_milligram">Milligram</string>
+    <string name="mass_unit_gram">Gram</string>
+    <string name="mass_unit_kilogram">Kilogram</string>
+    <string name="mass_unit_ounce">Ounce</string>
+    <string name="mass_unit_pound">Pound</string>
+    <string name="mass_unit_stone">Stone</string>
 </resources>
