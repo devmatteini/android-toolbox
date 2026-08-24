@@ -47,4 +47,13 @@
     <string name="volume_unit_pint">Pinta</string>
     <string name="volume_unit_quart">Quarto</string>
     <string name="volume_unit_imperial_gallon">Gallone imperiale</string>
+    <string name="area_unit_square_centimeter">Centimetro quadrato</string>
+    <string name="area_unit_square_meter">Metro quadrato</string>
+    <string name="area_unit_square_kilometer">Chilometro quadrato</string>
+    <string name="area_unit_hectare">Ettaro</string>
+    <string name="area_unit_square_inch">Pollice quadrato</string>
+    <string name="area_unit_square_foot">Piede quadrato</string>
+    <string name="area_unit_square_yard">Iarda quadrata</string>
+    <string name="area_unit_square_mile">Miglio quadrato</string>
+    <string name="area_unit_acre">Acri</string>
 </resources>

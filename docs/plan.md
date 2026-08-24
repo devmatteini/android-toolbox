@@ -145,7 +145,7 @@
 - Add metric and imperial volume conversion tests.
 - Verify volume conversion offline.
 
-## 9. Add Area Converter
+## 9. Add Area Converter (Done)
 
 - Add `ConverterCategory.Area`.
 - Add area units:

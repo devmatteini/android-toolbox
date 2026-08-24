@@ -47,4 +47,13 @@
     <string name="volume_unit_pint">Pint</string>
     <string name="volume_unit_quart">Quart</string>
     <string name="volume_unit_imperial_gallon">Imperial gallon</string>
+    <string name="area_unit_square_centimeter">Square centimeter</string>
+    <string name="area_unit_square_meter">Square meter</string>
+    <string name="area_unit_square_kilometer">Square kilometer</string>
+    <string name="area_unit_hectare">Hectare</string>
+    <string name="area_unit_square_inch">Square inch</string>
+    <string name="area_unit_square_foot">Square foot</string>
+    <string name="area_unit_square_yard">Square yard</string>
+    <string name="area_unit_square_mile">Square mile</string>
+    <string name="area_unit_acre">Acre</string>
 </resources>

@@ -5,5 +5,6 @@ enum class ConverterCategory {
     Mass,
     Temperature,
     Speed,
-    Volume
+    Volume,
+    Area
 }

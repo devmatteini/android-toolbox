@@ -14,6 +14,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.cosimomatteini.toolbox.domain.ToolId
+import com.cosimomatteini.toolbox.ui.AreaScreen
 import com.cosimomatteini.toolbox.ui.HomeScreen
 import com.cosimomatteini.toolbox.ui.HomeViewModel
 import com.cosimomatteini.toolbox.ui.LengthScreen
@@ -47,6 +48,7 @@ class MainActivity : ComponentActivity() {
                             uiState = uiState,
                             onToolClick = { tool ->
                                 screen = when (tool.id) {
+                                    ToolId.Area -> AppScreen.Area
                                     ToolId.Length -> AppScreen.Length
                                     ToolId.Mass -> AppScreen.Mass
                                     ToolId.Temperature -> AppScreen.Temperature
@@ -55,6 +57,13 @@ class MainActivity : ComponentActivity() {
                                     else -> AppScreen.Home
                                 }
                             }
+                        )
+                    }
+
+                    AppScreen.Area -> {
+                        AreaScreen(
+                            convertArea = appContainer.convertArea,
+                            onBack = { screen = AppScreen.Home }
                         )
                     }
 
@@ -100,6 +109,7 @@ class MainActivity : ComponentActivity() {
 
 private enum class AppScreen {
     Home,
+    Area,
     Length,
     Mass,
     Temperature,
