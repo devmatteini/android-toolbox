@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Toolbox</string>
+    <string name="tools_title">Strumenti</string>
+    <string name="tool_length">Lunghezza</string>
+    <string name="tool_mass">Massa</string>
+    <string name="tool_temperature">Temperatura</string>
+    <string name="tool_speed">Velocità</string>
+    <string name="tool_volume">Volume</string>
+    <string name="tool_area">Area</string>
+    <string name="tool_compass">Bussola</string>
 </resources>

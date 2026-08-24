@@ -25,7 +25,7 @@
 - Document magnetic-north compass sensor integration.
 - Verify the app still builds.
 
-## 3. Show Tool Home Screen
+## 3. Show Tool Home Screen (Done)
 
 - Add immutable `Tool` domain model.
 - Add the initial tool catalog:

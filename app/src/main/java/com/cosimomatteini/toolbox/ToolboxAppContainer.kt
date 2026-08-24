@@ -1,3 +1,7 @@
 package com.cosimomatteini.toolbox
 
-class ToolboxAppContainer
+import com.cosimomatteini.toolbox.features.Tools
+
+class ToolboxAppContainer {
+    val tools = Tools()
+}
