@@ -186,3 +186,48 @@
 - Do not correct for true-north declination.
 - Add unit tests for heading normalization and cardinal directions.
 - Verify live heading manually on a physical device.
+
+## 11. Package ECB Currency Rates
+
+- Add a non-cacheable Gradle task that fetches ECB rates through Frankfurter:
+  - `https://api.frankfurter.dev/v2/rates?base=EUR&providers=ECB`
+  - Run before generated assets are packaged.
+  - Fail the build when the request, parsing, or validation fails.
+  - Never package a stale prior task output after a failed fetch.
+- Normalize the response into a generated `currency-rates.json` asset:
+  - Schema version.
+  - Provider ID and name: `ECB` and `European Central Bank`.
+  - Source URL, download timestamp, and provider rate date.
+  - Base currency `EUR`.
+  - `rates` map containing `EUR: "1"` and positive decimal-string rates.
+- Validate the generated data has one rate date, valid ISO 4217 codes, positive rates, and EUR at exactly one.
+- Add tests for generated-data parsing and validation failures.
+- Verify an app build contains a valid generated `currency-rates.json` asset and fails when the fetch fails.
+
+## 12. Add Offline Currency Converter UI
+
+- Add Currency to the tool catalog, home presentation, navigation, English strings, and Italian strings.
+- Load packaged `currency-rates.json` when Currency opens; no network request is needed for this initial UI.
+- Add dynamic currency units from the packaged rate codes; do not use an enum or ship manually maintained currency names.
+- Use `java.util.Currency` to show localized names in selectors, formatted as `Name (CODE)`, sorted by localized name, and fall back to the code for unknown platform currencies.
+- Add pure EUR-pivot conversion using `BigDecimal`: `amount * targetRate / sourceRate`.
+- Add a Currency screen reusing converter cards and keypad, defaulting to EUR and USD, with currency codes in the value badges.
+- Extend the shared converter top bar with an optional screen-specific action slot for Currency.
+- Show the ECB source and provider rate date in the Currency screen; clarify rates are reference rates, not card or bank transaction rates.
+- Verify a newly installed app converts all bundled currencies with airplane mode enabled.
+
+## 13. Refresh Currency Rates When Opened
+
+- Add the `INTERNET` manifest permission for Currency rate downloads only.
+- Load the latest valid rates in this order: persisted runtime file, packaged generated asset.
+- Persist runtime rates atomically in the same JSON schema as the packaged asset.
+- When Currency opens, render immediately from available local rates, then attempt one refresh only when the last refresh attempt is at least 24 hours old.
+- Seed the first-refresh cooldown from the packaged asset download time, avoiding an unnecessary request immediately after installation.
+- Record the refresh attempt before the network request so repeated opens cannot exceed one request per 24 hours, including offline and failed requests.
+- On a successful refresh, validate and persist the new file, update the conversion state without losing the entered value or selected currencies, and show the new provider rate date.
+- On a failed refresh, retain the persisted or packaged data and show a non-blocking failure message; never make conversion unavailable.
+- Do not schedule background work: refresh only when the Currency screen opens.
+- Add a Currency app-bar refresh action with loading state.
+- During the 24-hour cooldown, present the action as unavailable; interaction explains that the latest exchange rates are already downloaded. Use a distinct message if the most recent check failed.
+- Add tests for packaged fallback, persisted-rate precedence, JSON validation, decimal precision, conversion, atomic-update failure retention, cooldown behavior, on-open-only refresh, and refresh-state UI.
+- Verify successful and failed refreshes manually with connectivity toggled.
