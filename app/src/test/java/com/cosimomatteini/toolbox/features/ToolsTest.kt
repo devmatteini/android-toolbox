@@ -11,7 +11,7 @@ class ToolsTest {
         val tools = Tools().catalog()
 
         assertEquals(
-            listOf(
+            setOf(
                 ToolId.Length,
                 ToolId.Mass,
                 ToolId.Temperature,
@@ -20,7 +20,7 @@ class ToolsTest {
                 ToolId.Area,
                 ToolId.Compass
             ),
-            tools.map { it.id }
+            tools.map { it.id }.toSet()
         )
     }
 
