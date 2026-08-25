@@ -11,9 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
@@ -92,11 +90,11 @@ fun <U : ConverterUnit> ConverterScreen(
         }
     ) { innerPadding ->
         Column(
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(horizontal = 20.dp, vertical = 16.dp)
+                .padding(horizontal = 16.dp, vertical = 8.dp)
                 .verticalScroll(rememberScrollState())
         ) {
             ConversionCard(
@@ -128,7 +126,7 @@ fun <U : ConverterUnit> ConverterScreen(
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.padding(horizontal = 4.dp)
             )
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             Keypad(
                 onDigit = onDigit,
                 onDecimal = onDecimal,
@@ -171,12 +169,12 @@ private fun <U : ConverterUnit> ConversionCard(
         shape = MaterialTheme.shapes.extraLarge,
         modifier = Modifier
             .fillMaxWidth()
-            .height(148.dp)
+            .height(140.dp)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(20.dp)
+                .padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
             UnitSelector(
                 label = label,
@@ -272,7 +270,7 @@ private fun Keypad(
     val decimalLabel = stringResource(R.string.converter_decimal)
     val signLabel = stringResource(R.string.converter_toggle_sign)
 
-    Column(verticalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
         KeypadRow {
             DigitButton(7, onDigit)
             DigitButton(8, onDigit)
@@ -302,7 +300,7 @@ private fun Keypad(
                     Text("±", style = MaterialTheme.typography.headlineMedium)
                 }
             } else {
-                Spacer(modifier = Modifier.size(KEYPAD_BUTTON_SIZE))
+                KeypadSpacer()
             }
         }
         KeypadRow {
@@ -316,7 +314,7 @@ private fun Keypad(
             KeypadButton(onClick = onDelete, contentDescription = deleteLabel) {
                 Icon(Icons.AutoMirrored.Outlined.Backspace, contentDescription = null)
             }
-            Spacer(modifier = Modifier.size(KEYPAD_BUTTON_SIZE))
+            KeypadSpacer()
         }
     }
 }
@@ -324,9 +322,18 @@ private fun Keypad(
 @Composable
 private fun KeypadRow(content: @Composable RowScope.() -> Unit) {
     Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
         modifier = Modifier.fillMaxWidth(),
         content = content
+    )
+}
+
+@Composable
+private fun RowScope.KeypadSpacer() {
+    Spacer(
+        modifier = Modifier
+            .weight(1f)
+            .height(KEYPAD_BUTTON_HEIGHT)
     )
 }
 
@@ -345,19 +352,27 @@ private fun RowScope.KeypadButton(
     content: @Composable RowScope.() -> Unit
 ) {
     val modifier = Modifier
-        .size(KEYPAD_BUTTON_SIZE)
+        .weight(1f)
+        .height(KEYPAD_BUTTON_HEIGHT)
         .semantics { this.contentDescription = contentDescription }
 
     if (emphasized) {
-        Button(onClick = onClick, modifier = modifier, shape = CircleShape, content = content)
+        Button(
+            onClick = onClick,
+            modifier = modifier,
+            shape = MaterialTheme.shapes.extraLarge,
+            contentPadding = PaddingValues(0.dp),
+            content = content
+        )
     } else {
         FilledTonalButton(
             onClick = onClick,
             modifier = modifier,
-            shape = CircleShape,
+            shape = MaterialTheme.shapes.extraLarge,
+            contentPadding = PaddingValues(0.dp),
             content = content
         )
     }
 }
 
-private val KEYPAD_BUTTON_SIZE = 82.dp
+private val KEYPAD_BUTTON_HEIGHT = 64.dp
