@@ -13,13 +13,12 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.CropSquare
+import androidx.compose.material.icons.outlined.AspectRatio
 import androidx.compose.material.icons.outlined.DeviceThermostat
 import androidx.compose.material.icons.outlined.Explore
-import androidx.compose.material.icons.outlined.Scale
+import androidx.compose.material.icons.outlined.LocalDrink
 import androidx.compose.material.icons.outlined.Speed
 import androidx.compose.material.icons.outlined.Straighten
-import androidx.compose.material.icons.outlined.WaterDrop
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
@@ -110,10 +110,14 @@ private fun ToolCard(tool: Tool, onClick: () -> Unit) {
     }
 }
 
+@Composable
 private fun Tool.presentation(): ToolPresentation = when (id) {
     ToolId.Length -> ToolPresentation(R.string.tool_length, Icons.Outlined.Straighten)
 
-    ToolId.Mass -> ToolPresentation(R.string.tool_mass, Icons.Outlined.Scale)
+    ToolId.Mass -> ToolPresentation(
+        R.string.tool_mass,
+        ImageVector.vectorResource(R.drawable.weight_24px)
+    )
 
     ToolId.Temperature -> ToolPresentation(
         R.string.tool_temperature,
@@ -122,9 +126,9 @@ private fun Tool.presentation(): ToolPresentation = when (id) {
 
     ToolId.Speed -> ToolPresentation(R.string.tool_speed, Icons.Outlined.Speed)
 
-    ToolId.Volume -> ToolPresentation(R.string.tool_volume, Icons.Outlined.WaterDrop)
+    ToolId.Volume -> ToolPresentation(R.string.tool_volume, Icons.Outlined.LocalDrink)
 
-    ToolId.Area -> ToolPresentation(R.string.tool_area, Icons.Outlined.CropSquare)
+    ToolId.Area -> ToolPresentation(R.string.tool_area, Icons.Outlined.AspectRatio)
 
     ToolId.Compass -> ToolPresentation(R.string.tool_compass, Icons.Outlined.Explore)
 }
