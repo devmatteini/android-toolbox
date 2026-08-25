@@ -5,19 +5,19 @@ build:
 	./gradlew :app:assembleDebug
 
 check:
-	./gradlew ktlintCheck test :app:assembleDebug
+	./gradlew :buildSrc:ktlintCheck ktlintCheck test :buildSrc:test :app:assembleDebug
 
 test:
-	./gradlew test
+	./gradlew test :buildSrc:test
 
 android-test:
 	./gradlew :app:connectedDebugAndroidTest
 
 lint:
-	./gradlew ktlintCheck
+	./gradlew :buildSrc:ktlintCheck ktlintCheck
 
 format:
-	./gradlew ktlintFormat
+	./gradlew :buildSrc:ktlintFormat ktlintFormat
 
 release:
 	./gradlew :app:assembleRelease

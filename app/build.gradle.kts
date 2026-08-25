@@ -1,3 +1,5 @@
+import com.cosimomatteini.toolbox.build.GenerateCurrencyRatesTask
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -39,6 +41,21 @@ android {
     }
     buildFeatures {
         compose = true
+    }
+}
+
+val currencyRatesAssets = layout.buildDirectory.dir("generated/currencyRates/assets")
+val generateCurrencyRates by tasks.registering(GenerateCurrencyRatesTask::class) {
+    outputDirectory.set(currencyRatesAssets)
+    temporaryDirectory.set(layout.buildDirectory.dir("tmp/generateCurrencyRates"))
+}
+
+androidComponents {
+    onVariants(selector().all()) { variant ->
+        variant.sources.assets?.addGeneratedSourceDirectory(
+            generateCurrencyRates,
+            GenerateCurrencyRatesTask::outputDirectory
+        )
     }
 }
 

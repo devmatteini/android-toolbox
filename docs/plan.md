@@ -187,7 +187,7 @@
 - Add unit tests for heading normalization and cardinal directions.
 - Verify live heading manually on a physical device.
 
-## 11. Package ECB Currency Rates
+## 11. Package ECB Currency Rates (Done)
 
 - Add a non-cacheable Gradle task that fetches ECB rates through Frankfurter:
   - `https://api.frankfurter.dev/v2/rates?base=EUR&providers=ECB`
