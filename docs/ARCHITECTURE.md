@@ -8,7 +8,8 @@ the device's magnetic-north sensor.
 ## Product Features
 
 - Convert length, mass, temperature, speed, volume, and area units.
-- Show a magnetic-north compass heading and cardinal direction.
+- Show a magnetic-north compass heading, eight-point direction, level, and magnetic-field
+  diagnostics when available.
 - Work without network access.
 - Keep converter state in memory only.
 
@@ -20,9 +21,18 @@ the device's magnetic-north sensor.
 - The numeric keypad accepts the active locale's decimal separator.
 - Swap exchanges the selected units and promotes the converted value to editable input.
 
+### Home
+
+- The home screen presents a fixed local catalog in this order: Compass, Length, Speed,
+  Temperature, Mass, Volume, and Area.
+- The app is portrait-only.
+
 ### Compass
 
-- The compass shows heading in degrees and the localized cardinal direction.
+- The compass shows heading in degrees and a localized eight-point direction, including
+  intercardinal directions.
+- It shows device pitch and roll, plus magnetic-field strength and accuracy when the device has a
+  magnetic-field sensor. A missing magnetic-field sensor does not disable the compass.
 - The app shows an unavailable state when a rotation-vector sensor is unavailable.
 - Sensor listeners are registered only while the compass is visible.
 
@@ -86,7 +96,10 @@ Do not depend on `infrastructure` from `domain` or `features`.
 ### Compass Platform
 
 - Android `SensorManager` behind a `CompassSensor` port.
-- Use the rotation-vector sensor for magnetic-north heading.
+- Use the rotation-vector sensor for magnetic-north heading and device level.
+- Use the magnetic-field sensor, when available, only for field strength and accuracy diagnostics.
+- A missing rotation-vector sensor makes the compass unavailable; a missing magnetic-field sensor
+  does not.
 - Keep the Android sensor implementation in `infrastructure/`; the port and heading logic stay
   outside Android-specific code.
 - Do not request location permission or correct for true-north declination.
