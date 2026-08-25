@@ -8,13 +8,13 @@ class Tools {
 
     private companion object {
         val catalog = listOf(
+            Tool(ToolId.Compass),
             Tool(ToolId.Length),
-            Tool(ToolId.Mass),
-            Tool(ToolId.Temperature),
             Tool(ToolId.Speed),
+            Tool(ToolId.Temperature),
+            Tool(ToolId.Mass),
             Tool(ToolId.Volume),
-            Tool(ToolId.Area),
-            Tool(ToolId.Compass)
+            Tool(ToolId.Area)
         )
     }
 }
