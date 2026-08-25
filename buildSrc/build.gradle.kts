@@ -4,6 +4,12 @@ plugins {
     id("org.jlleitschuh.gradle.ktlint") version "14.2.0"
 }
 
+sourceSets {
+    named("main") {
+        java.srcDir("../shared/currency-rates/src/main/kotlin")
+    }
+}
+
 repositories {
     gradlePluginPortal()
     mavenCentral()

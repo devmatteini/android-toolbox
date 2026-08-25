@@ -1,5 +1,12 @@
 package com.cosimomatteini.toolbox.build
 
+import com.cosimomatteini.toolbox.currencyrates.CURRENCY_RATES_BASE
+import com.cosimomatteini.toolbox.currencyrates.CURRENCY_RATES_PROVIDER_ID
+import com.cosimomatteini.toolbox.currencyrates.CURRENCY_RATES_PROVIDER_NAME
+import com.cosimomatteini.toolbox.currencyrates.CURRENCY_RATES_SCHEMA_VERSION
+import com.cosimomatteini.toolbox.currencyrates.CurrencyRateProvider
+import com.cosimomatteini.toolbox.currencyrates.CurrencyRatesFile
+import com.cosimomatteini.toolbox.currencyrates.CurrencyRatesFileCodec
 import java.math.BigDecimal
 import java.net.HttpURLConnection
 import java.net.URI
@@ -10,7 +17,6 @@ import java.nio.file.StandardCopyOption
 import java.time.Instant
 import java.time.LocalDate
 import java.util.Currency
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonPrimitive
 import org.gradle.api.DefaultTask
@@ -21,10 +27,6 @@ import org.gradle.api.tasks.LocalState
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 
-private const val SCHEMA_VERSION = 1
-private const val PROVIDER_ID = "ECB"
-private const val PROVIDER_NAME = "European Central Bank"
-private const val BASE_CURRENCY = "EUR"
 private const val CURRENCY_RATES_FILE_NAME = "currency-rates.json"
 
 abstract class GenerateCurrencyRatesTask : DefaultTask() {
@@ -87,7 +89,7 @@ abstract class GenerateCurrencyRatesTask : DefaultTask() {
 
     private companion object {
         const val FRANKFURTER_URL =
-            "https://api.frankfurter.dev/v2/rates?base=$BASE_CURRENCY&providers=$PROVIDER_ID"
+            "https://api.frankfurter.dev/v2/rates?base=$CURRENCY_RATES_BASE&providers=$CURRENCY_RATES_PROVIDER_ID"
     }
 }
 
@@ -105,26 +107,29 @@ data class CurrencyRates(val rateDate: LocalDate, val rates: Map<String, BigDeci
 
             val rates = records.map(FrankfurterRateRecord::toFrankfurterRate)
                 .associate { it.targetCurrency to it.conversionRate }
-            require(rates[BASE_CURRENCY]?.compareTo(BigDecimal.ONE) == 0) {
-                "Currency-rates $BASE_CURRENCY rate must be exactly 1"
+            require(rates[CURRENCY_RATES_BASE]?.compareTo(BigDecimal.ONE) == 0) {
+                "Currency-rates $CURRENCY_RATES_BASE rate must be exactly 1"
             }
             return CurrencyRates(LocalDate.parse(dates.single()), rates.toSortedMap())
         }
 
         fun toJson(rates: CurrencyRates, sourceUrl: String, downloadedAt: Instant): String =
-            json.encodeToString(
+            CurrencyRatesFileCodec.encode(
                 CurrencyRatesFile(
-                    schemaVersion = SCHEMA_VERSION,
-                    provider = CurrencyRateProvider(PROVIDER_ID, PROVIDER_NAME),
+                    schemaVersion = CURRENCY_RATES_SCHEMA_VERSION,
+                    provider = CurrencyRateProvider(
+                        CURRENCY_RATES_PROVIDER_ID,
+                        CURRENCY_RATES_PROVIDER_NAME
+                    ),
                     sourceUrl = sourceUrl,
                     downloadedAt = downloadedAt.toString(),
                     rateDate = rates.rateDate.toString(),
-                    base = BASE_CURRENCY,
+                    base = CURRENCY_RATES_BASE,
                     rates = rates.rates.mapValues { (_, rate) ->
                         rate.stripTrailingZeros().toPlainString()
                     }
                 )
-            ) + "\n"
+            )
 
         private val json = Json {
             ignoreUnknownKeys = true
@@ -133,7 +138,7 @@ data class CurrencyRates(val rateDate: LocalDate, val rates: Map<String, BigDeci
     }
 }
 
-@Serializable
+@kotlinx.serialization.Serializable
 private data class FrankfurterRateRecord(
     val date: String,
     val base: String,
@@ -141,7 +146,9 @@ private data class FrankfurterRateRecord(
     val rate: JsonPrimitive
 ) {
     fun toFrankfurterRate(): FrankfurterRate {
-        require(base == BASE_CURRENCY) { "Currency rate base must be $BASE_CURRENCY" }
+        require(base == CURRENCY_RATES_BASE) {
+            "Currency rate base must be $CURRENCY_RATES_BASE"
+        }
         return FrankfurterRate(quote, BigDecimal(rate.content))
     }
 }
@@ -154,20 +161,6 @@ private data class FrankfurterRate(val targetCurrency: String, val conversionRat
         }
     }
 }
-
-@Serializable
-private data class CurrencyRatesFile(
-    val schemaVersion: Int,
-    val provider: CurrencyRateProvider,
-    val sourceUrl: String,
-    val downloadedAt: String,
-    val rateDate: String,
-    val base: String,
-    val rates: Map<String, String>
-)
-
-@Serializable
-private data class CurrencyRateProvider(val id: String, val name: String)
 
 private fun requireCurrencyCode(code: String) {
     try {

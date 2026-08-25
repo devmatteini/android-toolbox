@@ -1,5 +1,6 @@
 package com.cosimomatteini.toolbox.build
 
+import com.cosimomatteini.toolbox.currencyrates.CurrencyRatesFileCodec
 import java.math.BigDecimal
 import java.time.Instant
 import java.time.LocalDate
@@ -29,6 +30,17 @@ class CurrencyRatesTest {
         assertTrue(json.contains("\"id\": \"ECB\""))
         assertTrue(json.contains("\"name\": \"European Central Bank\""))
         assertTrue(json.contains("\"EUR\": \"1\""))
+    }
+
+    @Test
+    fun `generated schema decodes with the shared codec`() {
+        val json = CurrencyRates.toJson(
+            CurrencyRates(LocalDate.parse("2026-08-25"), mapOf("EUR" to BigDecimal.ONE)),
+            "https://example.test/rates",
+            Instant.parse("2026-08-25T12:00:00Z")
+        )
+
+        assertEquals("EUR", CurrencyRatesFileCodec.decode(json).base)
     }
 
     @Test(expected = IllegalArgumentException::class)
