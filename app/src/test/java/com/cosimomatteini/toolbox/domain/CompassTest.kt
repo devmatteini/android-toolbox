@@ -18,15 +18,23 @@ class CompassTest {
     }
 
     @Test
-    fun `maps heading boundaries to four cardinal directions`() {
-        assertEquals(CardinalDirection.North, cardinalDirection(CompassHeading(44)))
-        assertEquals(CardinalDirection.East, cardinalDirection(CompassHeading(45)))
-        assertEquals(CardinalDirection.East, cardinalDirection(CompassHeading(134)))
-        assertEquals(CardinalDirection.South, cardinalDirection(CompassHeading(135)))
-        assertEquals(CardinalDirection.South, cardinalDirection(CompassHeading(224)))
-        assertEquals(CardinalDirection.West, cardinalDirection(CompassHeading(225)))
-        assertEquals(CardinalDirection.West, cardinalDirection(CompassHeading(314)))
-        assertEquals(CardinalDirection.North, cardinalDirection(CompassHeading(315)))
+    fun `maps heading boundaries to eight compass directions`() {
+        assertEquals(CardinalDirection.North, cardinalDirection(CompassHeading(22)))
+        assertEquals(CardinalDirection.NorthEast, cardinalDirection(CompassHeading(23)))
+        assertEquals(CardinalDirection.NorthEast, cardinalDirection(CompassHeading(67)))
+        assertEquals(CardinalDirection.East, cardinalDirection(CompassHeading(68)))
+        assertEquals(CardinalDirection.East, cardinalDirection(CompassHeading(112)))
+        assertEquals(CardinalDirection.SouthEast, cardinalDirection(CompassHeading(113)))
+        assertEquals(CardinalDirection.SouthEast, cardinalDirection(CompassHeading(157)))
+        assertEquals(CardinalDirection.South, cardinalDirection(CompassHeading(158)))
+        assertEquals(CardinalDirection.South, cardinalDirection(CompassHeading(202)))
+        assertEquals(CardinalDirection.SouthWest, cardinalDirection(CompassHeading(203)))
+        assertEquals(CardinalDirection.SouthWest, cardinalDirection(CompassHeading(247)))
+        assertEquals(CardinalDirection.West, cardinalDirection(CompassHeading(248)))
+        assertEquals(CardinalDirection.West, cardinalDirection(CompassHeading(292)))
+        assertEquals(CardinalDirection.NorthWest, cardinalDirection(CompassHeading(293)))
+        assertEquals(CardinalDirection.NorthWest, cardinalDirection(CompassHeading(337)))
+        assertEquals(CardinalDirection.North, cardinalDirection(CompassHeading(338)))
     }
 
     @Test

@@ -413,9 +413,13 @@ private fun CompassUnavailable() {
 
 private fun CardinalDirection.labelRes(): Int = when (this) {
     CardinalDirection.North -> R.string.compass_direction_north
+    CardinalDirection.NorthEast -> R.string.compass_direction_north_east
     CardinalDirection.East -> R.string.compass_direction_east
+    CardinalDirection.SouthEast -> R.string.compass_direction_south_east
     CardinalDirection.South -> R.string.compass_direction_south
+    CardinalDirection.SouthWest -> R.string.compass_direction_south_west
     CardinalDirection.West -> R.string.compass_direction_west
+    CardinalDirection.NorthWest -> R.string.compass_direction_north_west
 }
 
 @Composable
@@ -429,9 +433,13 @@ private fun CardinalDirection.color(): Color = if (this == CardinalDirection.Nor
 private fun CardinalDirection.shortLabel(): String = stringResource(
     when (this) {
         CardinalDirection.North -> R.string.compass_direction_north_short
+        CardinalDirection.NorthEast -> R.string.compass_direction_north_east_short
         CardinalDirection.East -> R.string.compass_direction_east_short
+        CardinalDirection.SouthEast -> R.string.compass_direction_south_east_short
         CardinalDirection.South -> R.string.compass_direction_south_short
+        CardinalDirection.SouthWest -> R.string.compass_direction_south_west_short
         CardinalDirection.West -> R.string.compass_direction_west_short
+        CardinalDirection.NorthWest -> R.string.compass_direction_north_west_short
     }
 )
 
