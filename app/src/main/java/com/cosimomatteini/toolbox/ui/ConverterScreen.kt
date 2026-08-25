@@ -3,6 +3,7 @@ package com.cosimomatteini.toolbox.ui
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -61,6 +62,8 @@ fun <U : ConverterUnit> ConverterScreen(
     uiState: ConverterUiState<U>,
     unitLabel: @Composable (U) -> String,
     onBack: () -> Unit,
+    actions: @Composable RowScope.() -> Unit = {},
+    additionalContent: @Composable ColumnScope.() -> Unit = {},
     onSourceUnitSelected: (U) -> Unit,
     onTargetUnitSelected: (U) -> Unit,
     onDigit: (Int) -> Unit,
@@ -85,7 +88,8 @@ fun <U : ConverterUnit> ConverterScreen(
                             contentDescription = stringResource(R.string.converter_back)
                         )
                     }
-                }
+                },
+                actions = actions
             )
         }
     ) { innerPadding ->
@@ -126,6 +130,7 @@ fun <U : ConverterUnit> ConverterScreen(
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.padding(horizontal = 4.dp)
             )
+            additionalContent()
             Spacer(modifier = Modifier.height(8.dp))
             Keypad(
                 onDigit = onDigit,

@@ -8,6 +8,7 @@
     <string name="tool_volume">Volume</string>
     <string name="tool_area">Area</string>
     <string name="tool_compass">Compass</string>
+    <string name="tool_currency">Currency</string>
     <string name="compass_loading">Waiting for compass sensor</string>
     <string name="compass_unavailable">Compass sensor unavailable</string>
     <string name="compass_heading">%1$d°</string>
@@ -50,6 +51,7 @@
     <string name="converter_delete">Delete</string>
     <string name="converter_clear">Clear</string>
     <string name="converter_toggle_sign">Toggle sign</string>
+    <string name="currency_rate_source">Source: %1$s (%2$s)</string>
     <string name="length_unit_millimeter">Millimeter</string>
     <string name="length_unit_centimeter">Centimeter</string>
     <string name="length_unit_meter">Meter</string>

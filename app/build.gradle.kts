@@ -3,7 +3,6 @@ import com.cosimomatteini.toolbox.build.GenerateCurrencyRatesTask
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ktlint)
 }
 
@@ -43,13 +42,6 @@ android {
     buildFeatures {
         compose = true
     }
-    sourceSets {
-        getByName("main") {
-            java.directories.add(
-                rootProject.projectDir.resolve("shared/currency-rates/src/main/kotlin").path
-            )
-        }
-    }
 }
 
 val currencyRatesAssets = layout.buildDirectory.dir("generated/currencyRates/assets")
@@ -80,7 +72,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.kotlinx.serialization.json)
+    implementation(project(":currency-rates"))
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(platform(libs.androidx.compose.bom))

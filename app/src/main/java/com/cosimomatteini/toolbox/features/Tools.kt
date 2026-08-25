@@ -10,6 +10,7 @@ class Tools {
         val catalog = listOf(
             Tool(ToolId.Compass),
             Tool(ToolId.Length),
+            Tool(ToolId.Currency),
             Tool(ToolId.Speed),
             Tool(ToolId.Temperature),
             Tool(ToolId.Mass),

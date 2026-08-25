@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AspectRatio
+import androidx.compose.material.icons.outlined.CurrencyExchange
 import androidx.compose.material.icons.outlined.DeviceThermostat
 import androidx.compose.material.icons.outlined.Explore
 import androidx.compose.material.icons.outlined.LocalDrink
@@ -131,6 +132,8 @@ private fun Tool.presentation(): ToolPresentation = when (id) {
     ToolId.Area -> ToolPresentation(R.string.tool_area, Icons.Outlined.AspectRatio)
 
     ToolId.Compass -> ToolPresentation(R.string.tool_compass, Icons.Outlined.Explore)
+
+    ToolId.Currency -> ToolPresentation(R.string.tool_currency, Icons.Outlined.CurrencyExchange)
 }
 
 private data class ToolPresentation(@param:StringRes val labelRes: Int, val icon: ImageVector)

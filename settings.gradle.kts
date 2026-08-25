@@ -24,3 +24,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Toolbox"
 include(":app")
+include(":currency-rates")

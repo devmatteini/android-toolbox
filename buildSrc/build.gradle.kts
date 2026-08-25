@@ -6,7 +6,7 @@ plugins {
 
 sourceSets {
     named("main") {
-        java.srcDir("../shared/currency-rates/src/main/kotlin")
+        java.srcDir("../currency-rates/src/main/kotlin")
     }
 }
 

@@ -1,6 +1,7 @@
 package com.cosimomatteini.toolbox.build
 
 import com.cosimomatteini.toolbox.currencyrates.CURRENCY_RATES_BASE
+import com.cosimomatteini.toolbox.currencyrates.CURRENCY_RATES_FILE_NAME
 import com.cosimomatteini.toolbox.currencyrates.CURRENCY_RATES_PROVIDER_ID
 import com.cosimomatteini.toolbox.currencyrates.CURRENCY_RATES_PROVIDER_NAME
 import com.cosimomatteini.toolbox.currencyrates.CURRENCY_RATES_SCHEMA_VERSION
@@ -26,8 +27,6 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.LocalState
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
-
-private const val CURRENCY_RATES_FILE_NAME = "currency-rates.json"
 
 abstract class GenerateCurrencyRatesTask : DefaultTask() {
     @get:Input

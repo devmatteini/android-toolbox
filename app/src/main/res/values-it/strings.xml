@@ -8,6 +8,7 @@
     <string name="tool_volume">Volume</string>
     <string name="tool_area">Area</string>
     <string name="tool_compass">Bussola</string>
+    <string name="tool_currency">Valuta</string>
     <string name="compass_loading">In attesa del sensore della bussola</string>
     <string name="compass_unavailable">Sensore della bussola non disponibile</string>
     <string name="compass_heading">%1$d°</string>
@@ -50,6 +51,7 @@
     <string name="converter_delete">Elimina</string>
     <string name="converter_clear">Cancella</string>
     <string name="converter_toggle_sign">Cambia segno</string>
+    <string name="currency_rate_source">Fonte: %1$s (%2$s)</string>
     <string name="length_unit_millimeter">Millimetro</string>
     <string name="length_unit_centimeter">Centimetro</string>
     <string name="length_unit_meter">Metro</string>

@@ -204,7 +204,7 @@
 - Add tests for generated-data parsing and validation failures.
 - Verify an app build contains a valid generated `currency-rates.json` asset and fails when the fetch fails.
 
-## 12. Add Offline Currency Converter UI
+## 12. Add Offline Currency Converter UI (Done)
 
 - Add Currency to the tool catalog, home presentation, navigation, English strings, and Italian strings.
 - Load packaged `currency-rates.json` when Currency opens; no network request is needed for this initial UI.

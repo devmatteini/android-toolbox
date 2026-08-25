@@ -12,6 +12,7 @@ const val CURRENCY_RATES_SCHEMA_VERSION = 1
 const val CURRENCY_RATES_PROVIDER_ID = "ECB"
 const val CURRENCY_RATES_PROVIDER_NAME = "European Central Bank"
 const val CURRENCY_RATES_BASE = "EUR"
+const val CURRENCY_RATES_FILE_NAME = "currency-rates.json"
 
 @Serializable
 data class CurrencyRatesFile(

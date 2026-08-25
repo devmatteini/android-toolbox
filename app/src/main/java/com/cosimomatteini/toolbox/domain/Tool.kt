@@ -9,5 +9,6 @@ enum class ToolId {
     Speed,
     Volume,
     Area,
-    Compass
+    Compass,
+    Currency
 }

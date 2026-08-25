@@ -18,7 +18,8 @@ class ToolsTest {
                 ToolId.Speed,
                 ToolId.Volume,
                 ToolId.Area,
-                ToolId.Compass
+                ToolId.Compass,
+                ToolId.Currency
             ),
             tools.map { it.id }.toSet()
         )

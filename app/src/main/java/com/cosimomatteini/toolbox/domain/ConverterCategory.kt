@@ -6,5 +6,6 @@ enum class ConverterCategory {
     Temperature,
     Speed,
     Volume,
-    Area
+    Area,
+    Currency
 }

@@ -16,6 +16,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.cosimomatteini.toolbox.domain.ToolId
 import com.cosimomatteini.toolbox.ui.AreaScreen
 import com.cosimomatteini.toolbox.ui.CompassScreen
+import com.cosimomatteini.toolbox.ui.CurrencyScreen
 import com.cosimomatteini.toolbox.ui.HomeScreen
 import com.cosimomatteini.toolbox.ui.HomeViewModel
 import com.cosimomatteini.toolbox.ui.LengthScreen
@@ -56,6 +57,7 @@ class MainActivity : ComponentActivity() {
                                     ToolId.Speed -> AppScreen.Speed
                                     ToolId.Volume -> AppScreen.Volume
                                     ToolId.Compass -> AppScreen.Compass
+                                    ToolId.Currency -> AppScreen.Currency
                                 }
                             }
                         )
@@ -71,6 +73,13 @@ class MainActivity : ComponentActivity() {
                     AppScreen.Compass -> {
                         CompassScreen(
                             observeCompass = appContainer.observeCompass,
+                            onBack = { screen = AppScreen.Home }
+                        )
+                    }
+
+                    AppScreen.Currency -> {
+                        CurrencyScreen(
+                            convertCurrency = appContainer.convertCurrency,
                             onBack = { screen = AppScreen.Home }
                         )
                     }
@@ -119,6 +128,7 @@ private enum class AppScreen {
     Home,
     Area,
     Compass,
+    Currency,
     Length,
     Mass,
     Temperature,
