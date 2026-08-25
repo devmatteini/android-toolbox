@@ -3,11 +3,7 @@ package com.cosimomatteini.toolbox.build
 import com.cosimomatteini.toolbox.currencyrates.CURRENCY_RATES_BASE
 import com.cosimomatteini.toolbox.currencyrates.CURRENCY_RATES_FILE_NAME
 import com.cosimomatteini.toolbox.currencyrates.CURRENCY_RATES_PROVIDER_ID
-import com.cosimomatteini.toolbox.currencyrates.CURRENCY_RATES_PROVIDER_NAME
-import com.cosimomatteini.toolbox.currencyrates.CURRENCY_RATES_SCHEMA_VERSION
-import com.cosimomatteini.toolbox.currencyrates.CurrencyRateProvider
-import com.cosimomatteini.toolbox.currencyrates.CurrencyRatesFile
-import com.cosimomatteini.toolbox.currencyrates.CurrencyRatesFileCodec
+import com.cosimomatteini.toolbox.currencyrates.FrankfurterCurrencyRates
 import java.math.BigDecimal
 import java.net.HttpURLConnection
 import java.net.URI
@@ -17,9 +13,6 @@ import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 import java.time.Instant
 import java.time.LocalDate
-import java.util.Currency
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonPrimitive
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.provider.Property
@@ -94,77 +87,11 @@ abstract class GenerateCurrencyRatesTask : DefaultTask() {
 
 data class CurrencyRates(val rateDate: LocalDate, val rates: Map<String, BigDecimal>) {
     companion object {
-        fun parse(response: String): CurrencyRates {
-            val records = json.decodeFromString<List<FrankfurterRateRecord>>(response)
-            require(records.isNotEmpty()) { "Currency-rates response must contain rates" }
-
-            val dates = records.map(FrankfurterRateRecord::date).distinct()
-            require(dates.size == 1) { "Currency-rates response must contain one rate date" }
-            require(records.map(FrankfurterRateRecord::quote).distinct().size == records.size) {
-                "Currency-rates response must not contain duplicate currencies"
-            }
-
-            val rates = records.map(FrankfurterRateRecord::toFrankfurterRate)
-                .associate { it.targetCurrency to it.conversionRate }
-            require(rates[CURRENCY_RATES_BASE]?.compareTo(BigDecimal.ONE) == 0) {
-                "Currency-rates $CURRENCY_RATES_BASE rate must be exactly 1"
-            }
-            return CurrencyRates(LocalDate.parse(dates.single()), rates.toSortedMap())
+        fun parse(response: String): CurrencyRates = FrankfurterCurrencyRates.parse(response).let {
+            CurrencyRates(it.rateDate, it.rates)
         }
 
         fun toJson(rates: CurrencyRates, sourceUrl: String, downloadedAt: Instant): String =
-            CurrencyRatesFileCodec.encode(
-                CurrencyRatesFile(
-                    schemaVersion = CURRENCY_RATES_SCHEMA_VERSION,
-                    provider = CurrencyRateProvider(
-                        CURRENCY_RATES_PROVIDER_ID,
-                        CURRENCY_RATES_PROVIDER_NAME
-                    ),
-                    sourceUrl = sourceUrl,
-                    downloadedAt = downloadedAt.toString(),
-                    rateDate = rates.rateDate.toString(),
-                    base = CURRENCY_RATES_BASE,
-                    rates = rates.rates.mapValues { (_, rate) ->
-                        rate.stripTrailingZeros().toPlainString()
-                    }
-                )
-            )
-
-        private val json = Json {
-            ignoreUnknownKeys = true
-            prettyPrint = true
-        }
-    }
-}
-
-@kotlinx.serialization.Serializable
-private data class FrankfurterRateRecord(
-    val date: String,
-    val base: String,
-    val quote: String,
-    val rate: JsonPrimitive
-) {
-    fun toFrankfurterRate(): FrankfurterRate {
-        require(base == CURRENCY_RATES_BASE) {
-            "Currency rate base must be $CURRENCY_RATES_BASE"
-        }
-        return FrankfurterRate(quote, BigDecimal(rate.content))
-    }
-}
-
-private data class FrankfurterRate(val targetCurrency: String, val conversionRate: BigDecimal) {
-    init {
-        requireCurrencyCode(targetCurrency)
-        require(conversionRate > BigDecimal.ZERO) {
-            "Currency rate for $targetCurrency must be positive"
-        }
-    }
-}
-
-private fun requireCurrencyCode(code: String) {
-    try {
-        Currency.getInstance(code)
-    } catch (_: IllegalArgumentException) {
-        throw IllegalArgumentException("Invalid ISO 4217 currency code: $code")
+            FrankfurterCurrencyRates(rates.rateDate, rates.rates).toJson(sourceUrl, downloadedAt)
     }
 }

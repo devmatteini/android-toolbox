@@ -52,6 +52,9 @@
     <string name="converter_clear">Cancella</string>
     <string name="converter_toggle_sign">Cambia segno</string>
     <string name="currency_rate_source">Fonte: %1$s (%2$s)</string>
+    <string name="currency_refresh">Aggiorna tassi di cambio</string>
+    <string name="currency_refresh_succeeded">Tassi di cambio aggiornati.</string>
+    <string name="currency_refresh_failed">Impossibile aggiornare i tassi di cambio. Sono mostrati i tassi salvati.</string>
     <string name="length_unit_millimeter">Millimetro</string>
     <string name="length_unit_centimeter">Centimetro</string>
     <string name="length_unit_meter">Metro</string>

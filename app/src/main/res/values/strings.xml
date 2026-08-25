@@ -52,6 +52,9 @@
     <string name="converter_clear">Clear</string>
     <string name="converter_toggle_sign">Toggle sign</string>
     <string name="currency_rate_source">Source: %1$s (%2$s)</string>
+    <string name="currency_refresh">Refresh exchange rates</string>
+    <string name="currency_refresh_succeeded">Exchange rates updated.</string>
+    <string name="currency_refresh_failed">Could not refresh exchange rates. Showing saved rates.</string>
     <string name="length_unit_millimeter">Millimeter</string>
     <string name="length_unit_centimeter">Centimeter</string>
     <string name="length_unit_meter">Meter</string>

@@ -79,7 +79,7 @@ class MainActivity : ComponentActivity() {
 
                     AppScreen.Currency -> {
                         CurrencyScreen(
-                            convertCurrency = appContainer.convertCurrency,
+                            currencyRates = appContainer.currencyRates,
                             onBack = { screen = AppScreen.Home }
                         )
                     }

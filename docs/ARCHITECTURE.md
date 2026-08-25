@@ -2,8 +2,8 @@
 
 ## Overview
 
-Toolbox is an Android-only, offline utility app. It provides unit converters and a compass using
-the device's magnetic-north sensor.
+Toolbox is an Android utility app. It provides unit converters and a compass using the device's
+magnetic-north sensor.
 
 ## Product Features
 
@@ -12,6 +12,7 @@ the device's magnetic-north sensor.
   diagnostics when available.
 - Work without network access.
 - Keep converter state in memory only.
+- Refresh packaged ECB currency reference rates on demand from the Currency toolbar.
 
 ## UX
 
@@ -43,7 +44,9 @@ the device's magnetic-north sensor.
 - Support Android 15+ / API 35+.
 - Kotlin and Jetpack Compose.
 - Coroutines and Flow.
-- No persistence, backend, sync, advertising SDKs, or network permissions.
+- No backend, sync, advertising SDKs, or background work.
+- The Currency screen alone has network access, solely to download ECB reference rates through
+  Frankfurter when the user requests a refresh.
 
 ### Architecture Style
 
@@ -87,10 +90,12 @@ Do not depend on `infrastructure` from `domain` or `features`.
 
 ### Offline And State
 
-- The app is offline-only: it has no network permissions, backend, sync, advertising SDKs, or
-  network clients.
+- All tools work offline with packaged or persisted currency rates. Currency refresh runs only
+  after the user presses its toolbar action, never in the background.
 - Converters do not persist values or unit selections. Their state is ephemeral and exists only in
   memory while the app process is alive.
+- Currency rates are the only persisted data. Runtime rates use the packaged JSON schema and are
+  atomically replaced after validation.
 - Do not add Room or another persistence layer unless a product requirement needs persistence.
 
 ### Compass Platform

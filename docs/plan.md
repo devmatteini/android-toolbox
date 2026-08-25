@@ -216,18 +216,16 @@
 - Show the ECB source and provider rate date in the Currency screen; clarify rates are reference rates, not card or bank transaction rates.
 - Verify a newly installed app converts all bundled currencies with airplane mode enabled.
 
-## 13. Refresh Currency Rates When Opened
+## 13. Refresh Currency Rates From Toolbar (Done)
 
 - Add the `INTERNET` manifest permission for Currency rate downloads only.
 - Load the latest valid rates in this order: persisted runtime file, packaged generated asset.
 - Persist runtime rates atomically in the same JSON schema as the packaged asset.
-- When Currency opens, render immediately from available local rates, then attempt one refresh only when the last refresh attempt is at least 24 hours old.
-- Seed the first-refresh cooldown from the packaged asset download time, avoiding an unnecessary request immediately after installation.
-- Record the refresh attempt before the network request so repeated opens cannot exceed one request per 24 hours, including offline and failed requests.
+- When Currency opens, render immediately from available local rates without making a network request.
 - On a successful refresh, validate and persist the new file, update the conversion state without losing the entered value or selected currencies, and show the new provider rate date.
 - On a failed refresh, retain the persisted or packaged data and show a non-blocking failure message; never make conversion unavailable.
-- Do not schedule background work: refresh only when the Currency screen opens.
+- Do not schedule background work: refresh only when the user requests it from the Currency screen.
 - Add a Currency app-bar refresh action with loading state.
-- During the 24-hour cooldown, present the action as unavailable; interaction explains that the latest exchange rates are already downloaded. Use a distinct message if the most recent check failed.
-- Add tests for packaged fallback, persisted-rate precedence, JSON validation, decimal precision, conversion, atomic-update failure retention, cooldown behavior, on-open-only refresh, and refresh-state UI.
+- Allow any number of user-initiated refreshes.
+- Add tests for packaged fallback, persisted-rate precedence, JSON validation, decimal precision, conversion, atomic-update failure retention, on-open-only behavior, and refresh-state UI.
 - Verify successful and failed refreshes manually with connectivity toggled.

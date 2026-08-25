@@ -1,7 +1,9 @@
 package com.cosimomatteini.toolbox.ui
 
+import com.cosimomatteini.toolbox.domain.CurrencyUnit
 import com.cosimomatteini.toolbox.domain.LengthUnit
 import com.cosimomatteini.toolbox.domain.TemperatureUnit
+import com.cosimomatteini.toolbox.domain.convertCurrency
 import com.cosimomatteini.toolbox.domain.convertLength
 import com.cosimomatteini.toolbox.domain.convertTemperature
 import java.util.Locale
@@ -75,6 +77,24 @@ class ConverterViewModelTest {
 
         assertEquals("-40", viewModel.uiState.value.sourceValue)
         assertEquals("-40", viewModel.uiState.value.targetValue)
+    }
+
+    @Test
+    fun `convert value again when converter changes`() {
+        val euro = CurrencyUnit("EUR", java.math.BigDecimal.ONE)
+        val originalDollar = CurrencyUnit("USD", java.math.BigDecimal("1.1"))
+        val viewModel = ConverterViewModel(euro, originalDollar, ::convertCurrency, Locale.US)
+
+        viewModel.onDigit(2)
+        val refreshedDollar = CurrencyUnit("USD", java.math.BigDecimal("1.2"))
+        viewModel.onConverterUpdated(::convertCurrency) { unit ->
+            if (unit.code == "USD") refreshedDollar else euro
+        }
+
+        assertEquals("EUR", viewModel.uiState.value.sourceUnit.code)
+        assertEquals("USD", viewModel.uiState.value.targetUnit.code)
+        assertEquals("2", viewModel.uiState.value.sourceValue)
+        assertEquals("2.4", viewModel.uiState.value.targetValue)
     }
 
     private fun viewModel(locale: Locale = Locale.US) = ConverterViewModel(

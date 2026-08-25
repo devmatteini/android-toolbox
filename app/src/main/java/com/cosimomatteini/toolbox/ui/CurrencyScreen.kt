@@ -1,12 +1,21 @@
 package com.cosimomatteini.toolbox.ui
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Refresh
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -16,6 +25,7 @@ import com.cosimomatteini.toolbox.R
 import com.cosimomatteini.toolbox.currencyrates.CURRENCY_RATES_BASE
 import com.cosimomatteini.toolbox.domain.CurrencyUnit
 import com.cosimomatteini.toolbox.features.ConvertCurrency
+import com.cosimomatteini.toolbox.features.CurrencyRates
 import java.text.Collator
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -24,9 +34,17 @@ import java.util.Currency
 import java.util.Locale
 
 @Composable
-fun CurrencyScreen(convertCurrency: ConvertCurrency, onBack: () -> Unit) {
+fun CurrencyScreen(currencyRates: CurrencyRates, onBack: () -> Unit) {
+    val ratesViewModel = viewModel<CurrencyRatesViewModel>(
+        key = "currencyRates",
+        factory = viewModelFactory { initializer { CurrencyRatesViewModel(currencyRates) } }
+    )
+    val ratesUiState by ratesViewModel.uiState.collectAsState()
+    val context = LocalContext.current
+    val refreshMessage = ratesUiState.message?.let { stringResource(it.stringRes) }
+    val convertCurrency = remember(ratesUiState.rates) { ConvertCurrency(ratesUiState.rates) }
     val sourceUnit = convertCurrency.units.single { it.code == CURRENCY_RATES_BASE }
-    val targetUnit = convertCurrency.units.single { it.code == USD }
+    val targetUnit = convertCurrency.units.singleOrNull { it.code == USD } ?: sourceUnit
     val locale = Locale.getDefault()
     val units = orderedCurrencyUnits(convertCurrency.units, locale)
     val viewModel = viewModel<ConverterViewModel<CurrencyUnit>>(
@@ -43,12 +61,37 @@ fun CurrencyScreen(convertCurrency: ConvertCurrency, onBack: () -> Unit) {
     )
     val uiState by viewModel.uiState.collectAsState()
 
+    LaunchedEffect(convertCurrency) {
+        viewModel.onConverterUpdated(convertCurrency::convert) { unit ->
+            convertCurrency.units.singleOrNull { it.code == unit.code } ?: unit
+        }
+    }
+    LaunchedEffect(refreshMessage) {
+        refreshMessage?.let { Toast.makeText(context, it, Toast.LENGTH_SHORT).show() }
+    }
+
     ConverterScreen(
         title = stringResource(R.string.tool_currency),
         units = units,
         uiState = uiState,
         unitLabel = { unit -> currencyLabel(unit, locale) },
         onBack = onBack,
+        actions = {
+            IconButton(
+                onClick = ratesViewModel::onRefreshRequested,
+                enabled = !ratesUiState.isRefreshing
+            ) {
+                if (ratesUiState.isRefreshing) {
+                    CircularProgressIndicator(modifier = Modifier.padding(12.dp))
+                } else {
+                    Icon(
+                        imageVector = Icons.Outlined.Refresh,
+                        contentDescription = stringResource(R.string.currency_refresh),
+                        tint = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+            }
+        },
         onSourceUnitSelected = viewModel::onSourceUnitSelected,
         onTargetUnitSelected = viewModel::onTargetUnitSelected,
         onDigit = viewModel::onDigit,
@@ -91,3 +134,9 @@ private fun currencyName(code: String, locale: Locale): String = try {
 }
 
 private const val USD = "USD"
+
+private val CurrencyRefreshMessage.stringRes: Int
+    get() = when (this) {
+        CurrencyRefreshMessage.Succeeded -> R.string.currency_refresh_succeeded
+        CurrencyRefreshMessage.Failed -> R.string.currency_refresh_failed
+    }

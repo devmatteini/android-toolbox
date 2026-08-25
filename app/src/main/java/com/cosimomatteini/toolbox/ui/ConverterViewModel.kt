@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.asStateFlow
 class ConverterViewModel<U : ConverterUnit>(
     sourceUnit: U,
     targetUnit: U,
-    private val convert: (BigDecimal, U, U) -> BigDecimal,
+    private var convert: (BigDecimal, U, U) -> BigDecimal,
     private val locale: Locale = Locale.getDefault()
 ) : ViewModel() {
     private val mutableUiState = MutableStateFlow(newState(sourceUnit, targetUnit, ZERO))
@@ -75,6 +75,16 @@ class ConverterViewModel<U : ConverterUnit>(
     fun onSwap() {
         val state = mutableUiState.value
         mutableUiState.value = newState(state.targetUnit, state.sourceUnit, state.sourceValue)
+    }
+
+    fun onConverterUpdated(convert: (BigDecimal, U, U) -> BigDecimal, updateUnit: (U) -> U) {
+        this.convert = convert
+        val state = mutableUiState.value
+        mutableUiState.value = newState(
+            updateUnit(state.sourceUnit),
+            updateUnit(state.targetUnit),
+            state.sourceValue
+        )
     }
 
     private fun updateSourceValue(value: String) {
