@@ -15,6 +15,7 @@ import com.cosimomatteini.toolbox.domain.normalizeHeading
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.flowOf
 
 class AndroidCompassSensor(context: Context) : CompassSensor {
@@ -88,7 +89,7 @@ class AndroidCompassSensor(context: Context) : CompassSensor {
             if (!sensorManager.registerListener(
                     orientationListener,
                     rotationVector,
-                    SensorManager.SENSOR_DELAY_UI
+                    SensorManager.SENSOR_DELAY_GAME
                 )
             ) {
                 trySend(CompassSensorReading.Unavailable)
@@ -108,7 +109,7 @@ class AndroidCompassSensor(context: Context) : CompassSensor {
                 sensorManager.unregisterListener(orientationListener)
                 sensorManager.unregisterListener(magneticFieldListener)
             }
-        }
+        }.conflate()
     }
 }
 
