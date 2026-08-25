@@ -33,4 +33,9 @@ class CompassTest {
     fun `rotates dial opposite to heading`() {
         assertEquals(-270f, dialRotation(CompassHeading(270)), 0f)
     }
+
+    @Test
+    fun `calculates magnetic field strength from its axes`() {
+        assertEquals(13f, magneticFieldStrength(3f, 4f, 12f), 0f)
+    }
 }

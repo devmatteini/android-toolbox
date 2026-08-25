@@ -1,6 +1,7 @@
 package com.cosimomatteini.toolbox.domain
 
 import kotlin.math.roundToInt
+import kotlin.math.sqrt
 
 data class CompassHeading(val degrees: Int) {
     init {
@@ -28,6 +29,8 @@ fun cardinalDirection(heading: CompassHeading): CardinalDirection = when (
 }
 
 fun dialRotation(heading: CompassHeading): Float = -heading.degrees.toFloat()
+
+fun magneticFieldStrength(x: Float, y: Float, z: Float): Float = sqrt(x * x + y * y + z * z)
 
 private const val MIN_HEADING = 0
 private const val MAX_HEADING = 359
