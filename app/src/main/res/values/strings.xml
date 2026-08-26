@@ -2,7 +2,7 @@
     <string name="app_name">Toolbox</string>
     <string name="tools_title">Tools</string>
     <string name="tool_length">Length</string>
-    <string name="tool_mass">Mass</string>
+    <string name="tool_mass">Weight</string>
     <string name="tool_temperature">Temperature</string>
     <string name="tool_speed">Speed</string>
     <string name="tool_volume">Volume</string>
