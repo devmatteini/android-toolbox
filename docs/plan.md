@@ -258,7 +258,7 @@
 - Model an initial loading state in `CurrencyRatesViewModel`.
 - Show a loading UI until rates are ready, then show the converter.
 
-## 19. Preserve Coroutine Cancellation During Refresh
+## 19. Preserve Coroutine Cancellation During Refresh (Done)
 
 - Rethrow `CancellationException` from currency refreshes.
 - Continue representing ordinary refresh failures as a non-blocking failure result.

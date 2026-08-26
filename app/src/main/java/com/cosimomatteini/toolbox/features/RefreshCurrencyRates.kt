@@ -3,6 +3,7 @@ package com.cosimomatteini.toolbox.features
 import com.cosimomatteini.toolbox.currencyrates.CurrencyRates
 import com.cosimomatteini.toolbox.domain.CurrencyExchangeRates
 import com.cosimomatteini.toolbox.domain.CurrencyRatesRepository
+import kotlinx.coroutines.CancellationException
 
 class RefreshCurrencyRates(
     private val currencyRates: CurrencyRatesRepository,
@@ -12,7 +13,8 @@ class RefreshCurrencyRates(
         val rates = currencyExchangeRates.load()
         currencyRates.save(rates)
         RefreshCurrencyResult.Updated(rates)
-    } catch (_: Exception) {
+    } catch (exception: Exception) {
+        if (exception is CancellationException) throw exception
         RefreshCurrencyResult.Failed
     }
 }
