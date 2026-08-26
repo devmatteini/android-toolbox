@@ -230,7 +230,7 @@
 - Add tests for packaged fallback, persisted-rate precedence, JSON validation, decimal precision, conversion, atomic-update failure retention, on-open-only behavior, and refresh-state UI.
 - Verify successful and failed refreshes manually with connectivity toggled.
 
-## 14. Extend CI Path Coverage
+## 14. Extend CI Path Coverage (Done)
 
 - Add `buildSrc/**` and `currency-rates/**` to the existing CI push path filter.
 - Do not add pull-request workflow triggers.

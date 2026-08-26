@@ -10,6 +10,8 @@ on:
       - .githooks/**
       - .github/workflows/ci.yml
       - app/**
+      - buildSrc/**
+      - currency-rates/**
       - gradle/**
       - build.gradle.kts
       - settings.gradle.kts
