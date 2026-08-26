@@ -123,7 +123,9 @@ fun CurrencyScreen(
 }
 
 internal fun currencyLabel(unit: CurrencyUnit, locale: Locale): String =
-    "${currencyName(unit.code, locale)} (${unit.code.value})"
+    currencyName(unit.code, locale).replaceFirstChar { character ->
+        character.titlecase(locale)
+    }
 
 internal fun orderedCurrencyUnits(units: List<CurrencyUnit>, locale: Locale): List<CurrencyUnit> {
     val collator = Collator.getInstance(locale)

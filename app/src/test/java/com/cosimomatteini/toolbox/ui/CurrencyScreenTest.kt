@@ -11,12 +11,12 @@ import org.junit.Test
 
 class CurrencyScreenTest {
     @Test
-    fun `currency label uses localized name and code`() {
+    fun `currency label titlecases localized name`() {
         assertEquals(
-            "US Dollar (USD)",
+            "Euro",
             currencyLabel(
-                CurrencyUnit(CurrencyCode.USD, BigDecimal.ONE),
-                Locale.US
+                CurrencyUnit(CurrencyCode.EUR, BigDecimal.ONE),
+                Locale.ITALY
             )
         )
     }
