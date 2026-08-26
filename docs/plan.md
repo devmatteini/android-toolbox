@@ -252,7 +252,7 @@
 - Remap rotation-vector coordinates using the current display rotation before deriving heading, pitch, and roll.
 - Support phones and tablets with landscape-natural displays while keeping the app portrait-only.
 
-## 18. Load Currency Rates Without Blocking UI
+## 18. Load Currency Rates Without Blocking UI (Done)
 
 - Load persisted and packaged currency rates on `Dispatchers.IO`.
 - Model an initial loading state in `CurrencyRatesViewModel`.

@@ -19,20 +19,23 @@ class CurrencyRatesViewModel(
     private val refreshCurrencyRates: RefreshCurrencyRates,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
-    private val mutableUiState = MutableStateFlow(
-        CurrencyRatesUiState(
-            rates = loadCurrencyRates()
-        )
-    )
+    private val mutableUiState = MutableStateFlow(CurrencyRatesUiState())
 
     val uiState = mutableUiState.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            val rates = withContext(dispatcher) { loadCurrencyRates() }
+            mutableUiState.update { it.copy(rates = rates, isLoading = false) }
+        }
+    }
 
     fun onRefreshRequested() {
         refresh()
     }
 
     private fun refresh() {
-        if (mutableUiState.value.isRefreshing) return
+        if (mutableUiState.value.isLoading || mutableUiState.value.isRefreshing) return
         mutableUiState.update { it.copy(isRefreshing = true, message = null) }
         viewModelScope.launch {
             when (val result = withContext(dispatcher) { refreshCurrencyRates() }) {
@@ -60,7 +63,8 @@ class CurrencyRatesViewModel(
 }
 
 data class CurrencyRatesUiState(
-    val rates: CurrencyRates,
+    val rates: CurrencyRates? = null,
+    val isLoading: Boolean = true,
     val isRefreshing: Boolean = false,
     val message: CurrencyRefreshMessage? = null
 )

@@ -1,19 +1,26 @@
 package com.cosimomatteini.toolbox.ui
 
 import android.widget.Toast
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -48,9 +55,14 @@ fun CurrencyScreen(
         }
     )
     val ratesUiState by ratesViewModel.uiState.collectAsState()
+    val rates = ratesUiState.rates
+    if (rates == null) {
+        CurrencyLoadingScreen(onBack)
+        return
+    }
     val context = LocalContext.current
     val refreshMessage = ratesUiState.message?.let { stringResource(it.stringRes) }
-    val convertCurrency = remember(ratesUiState.rates) { ConvertCurrency(ratesUiState.rates) }
+    val convertCurrency = remember(rates) { ConvertCurrency(rates) }
     val sourceUnit = convertCurrency.units.single { it.code == CurrencyCode.EUR }
     val targetUnit = convertCurrency.units.singleOrNull { it.code == CurrencyCode.USD }
         ?: sourceUnit
@@ -122,6 +134,35 @@ fun CurrencyScreen(
             )
         }
     )
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+private fun CurrencyLoadingScreen(onBack: () -> Unit) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(stringResource(R.string.tool_currency)) },
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(
+                            Icons.AutoMirrored.Outlined.ArrowBack,
+                            contentDescription = stringResource(R.string.converter_back)
+                        )
+                    }
+                }
+            )
+        }
+    ) { innerPadding ->
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+        ) {
+            CircularProgressIndicator()
+        }
+    }
 }
 
 internal fun currencyLabel(unit: CurrencyUnit, locale: Locale): String =
