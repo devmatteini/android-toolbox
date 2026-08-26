@@ -35,6 +35,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -82,6 +84,7 @@ fun <U : ConverterUnit> ConverterScreen(
     onSwap: () -> Unit,
     showSignToggle: Boolean = false,
     onToggleSign: () -> Unit = {},
+    snackbarHostState: SnackbarHostState? = null,
     modifier: Modifier = Modifier
 ) {
     val locale = LocalConfiguration.current.locales[0]
@@ -90,6 +93,9 @@ fun <U : ConverterUnit> ConverterScreen(
     }
     Scaffold(
         modifier = modifier,
+        snackbarHost = {
+            snackbarHostState?.let { SnackbarHost(it) }
+        },
         topBar = {
             TopAppBar(
                 title = { Text(title) },
