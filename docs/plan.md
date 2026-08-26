@@ -229,3 +229,51 @@
 - Allow any number of user-initiated refreshes.
 - Add tests for packaged fallback, persisted-rate precedence, JSON validation, decimal precision, conversion, atomic-update failure retention, on-open-only behavior, and refresh-state UI.
 - Verify successful and failed refreshes manually with connectivity toggled.
+
+## 14. Extend CI Path Coverage
+
+- Add `buildSrc/**` and `currency-rates/**` to the existing CI push path filter.
+- Do not add pull-request workflow triggers.
+
+## 15. Preserve Converter Input Across Locale Changes
+
+- Update converter state when the device locale changes.
+- Preserve the entered value while converting its decimal separator to the new locale.
+- Recalculate converted and equivalence values using the new locale.
+
+## 16. Stop Compass Sensors in Background
+
+- Collect compass readings only while the Compass screen lifecycle is at least `STARTED`.
+- Stop sensor listeners while the app is backgrounded.
+- Resume sensor collection when the Compass screen returns to the foreground.
+
+## 17. Remap Compass for Tablet Display Rotation
+
+- Remap rotation-vector coordinates using the current display rotation before deriving heading, pitch, and roll.
+- Support phones and tablets with landscape-natural displays while keeping the app portrait-only.
+
+## 18. Load Currency Rates Without Blocking UI
+
+- Load persisted and packaged currency rates on `Dispatchers.IO`.
+- Model an initial loading state in `CurrencyRatesViewModel`.
+- Show a loading UI until rates are ready, then show the converter.
+
+## 19. Preserve Coroutine Cancellation During Refresh
+
+- Rethrow `CancellationException` from currency refreshes.
+- Continue representing ordinary refresh failures as a non-blocking failure result.
+
+## 20. Consume Currency Refresh Messages Once
+
+- Clear the refresh message after its toast is displayed.
+- Do not replay a prior refresh toast after navigation or activity recreation.
+
+## 21. Disable App Data Backup and Transfer
+
+- Exclude app data from cloud backup and device transfer.
+- Remove obsolete pre-Android-12 backup configuration because the minimum SDK is API 35.
+
+## 22. Remove Unused Resources and Dependencies
+
+- Remove unused color resources.
+- Remove unused direct AndroidX dependencies after build verification.
