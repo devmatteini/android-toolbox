@@ -1,5 +1,6 @@
 package com.cosimomatteini.toolbox.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,7 +12,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -22,18 +26,20 @@ import androidx.compose.material.icons.outlined.SwapVert
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -222,6 +228,7 @@ private fun <U : ConverterUnit> ConversionCard(
 }
 
 @Composable
+@OptIn(ExperimentalMaterial3Api::class)
 private fun <U : ConverterUnit> UnitSelector(
     label: String,
     selected: U,
@@ -230,7 +237,11 @@ private fun <U : ConverterUnit> UnitSelector(
     onUnitSelected: (U) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
+    var query by remember { mutableStateOf("") }
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val selectedLabel = unitLabel(selected)
+    val unitOptions = units.map { unit -> unit to unitLabel(unit) }
+    val filteredOptions = filterUnitOptions(unitOptions, query)
 
     Box {
         TextButton(
@@ -245,16 +256,74 @@ private fun <U : ConverterUnit> UnitSelector(
                 modifier = Modifier.padding(start = 4.dp)
             )
         }
-        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-            units.forEach { unit ->
-                DropdownMenuItem(
-                    text = { Text(unitLabel(unit)) },
-                    onClick = {
-                        onUnitSelected(unit)
-                        expanded = false
-                    }
+    }
+    if (expanded) {
+        ModalBottomSheet(
+            onDismissRequest = {
+                expanded = false
+                query = ""
+            },
+            sheetState = sheetState
+        ) {
+            Column(modifier = Modifier.fillMaxWidth()) {
+                Text(
+                    text = stringResource(R.string.converter_select_unit),
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.padding(horizontal = 24.dp)
                 )
+                OutlinedTextField(
+                    value = query,
+                    onValueChange = { query = it },
+                    label = { Text(stringResource(R.string.converter_search_units)) },
+                    singleLine = true,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                )
+                if (filteredOptions.isEmpty()) {
+                    Text(
+                        text = stringResource(R.string.converter_no_units_found),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(horizontal = 24.dp, vertical = 16.dp)
+                    )
+                } else {
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(max = 480.dp),
+                        contentPadding = PaddingValues(bottom = 24.dp)
+                    ) {
+                        items(filteredOptions, key = { it.first.symbol }) { (unit, unitName) ->
+                            ListItem(
+                                headlineContent = { Text(unitName) },
+                                trailingContent = { Text(unit.symbol) },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable {
+                                        onUnitSelected(unit)
+                                        expanded = false
+                                        query = ""
+                                    }
+                            )
+                        }
+                    }
+                }
             }
+        }
+    }
+}
+
+internal fun <U : ConverterUnit> filterUnitOptions(
+    unitOptions: List<Pair<U, String>>,
+    query: String
+): List<Pair<U, String>> {
+    val search = query.trim()
+    return if (search.isEmpty()) {
+        unitOptions
+    } else {
+        unitOptions.filter { (unit, label) ->
+            label.contains(search, ignoreCase = true) ||
+                unit.symbol.contains(search, ignoreCase = true)
         }
     }
 }

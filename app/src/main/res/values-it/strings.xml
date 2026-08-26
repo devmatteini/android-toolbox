@@ -43,6 +43,7 @@
     <string name="converter_back">Indietro</string>
     <string name="converter_source_unit">Unità di partenza</string>
     <string name="converter_target_unit">Unità di arrivo</string>
+    <string name="converter_select_unit">Seleziona unità</string>
     <string name="converter_source_value">Valore</string>
     <string name="converter_converted_value">Valore convertito</string>
     <string name="converter_equivalence">1 %1$s = %2$s %3$s</string>
@@ -51,6 +52,8 @@
     <string name="converter_delete">Elimina</string>
     <string name="converter_clear">Cancella</string>
     <string name="converter_toggle_sign">Cambia segno</string>
+    <string name="converter_search_units">Cerca</string>
+    <string name="converter_no_units_found">Nessuna unità trovata</string>
     <string name="currency_rate_source">Fonte: %1$s (%2$s)</string>
     <string name="currency_refresh">Aggiorna tassi di cambio</string>
     <string name="currency_refresh_succeeded">Tassi di cambio aggiornati.</string>
