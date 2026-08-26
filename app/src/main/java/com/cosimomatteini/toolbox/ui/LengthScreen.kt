@@ -31,6 +31,7 @@ fun LengthScreen(convertLength: ConvertLength, onBack: () -> Unit) {
         title = stringResource(R.string.tool_length),
         units = convertLength.units,
         uiState = uiState,
+        onLocaleChanged = viewModel::onLocaleChanged,
         unitLabel = { unit -> stringResource(unit.labelRes()) },
         onBack = onBack,
         onSourceUnitSelected = viewModel::onSourceUnitSelected,

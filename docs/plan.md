@@ -235,7 +235,7 @@
 - Add `buildSrc/**` and `currency-rates/**` to the existing CI push path filter.
 - Do not add pull-request workflow triggers.
 
-## 15. Preserve Converter Input Across Locale Changes
+## 15. Preserve Converter Input Across Locale Changes (Done)
 
 - Update converter state when the device locale changes.
 - Preserve the entered value while converting its decimal separator to the new locale.

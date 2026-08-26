@@ -56,6 +56,31 @@ class ConverterViewModelTest {
     }
 
     @Test
+    fun `locale change preserves decimal input and recalculates values`() {
+        val viewModel = viewModel()
+
+        viewModel.onDigit(1)
+        viewModel.onDecimal()
+        viewModel.onDigit(5)
+        viewModel.onLocaleChanged(Locale.ITALY)
+
+        assertEquals("1,5", viewModel.uiState.value.sourceValue)
+        assertEquals("0,0015", viewModel.uiState.value.targetValue)
+        assertEquals("0,001", viewModel.uiState.value.equivalenceValue)
+    }
+
+    @Test
+    fun `locale change preserves an unfinished decimal input`() {
+        val viewModel = viewModel()
+
+        viewModel.onDigit(1)
+        viewModel.onDecimal()
+        viewModel.onLocaleChanged(Locale.ITALY)
+
+        assertEquals("1,", viewModel.uiState.value.sourceValue)
+    }
+
+    @Test
     fun `swap retains source input`() {
         val viewModel = viewModel()
 

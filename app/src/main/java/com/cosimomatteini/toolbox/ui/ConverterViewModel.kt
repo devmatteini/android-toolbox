@@ -14,7 +14,7 @@ class ConverterViewModel<U : ConverterUnit>(
     sourceUnit: U,
     targetUnit: U,
     private var convert: (BigDecimal, U, U) -> BigDecimal,
-    private val locale: Locale = Locale.getDefault()
+    private var locale: Locale = Locale.getDefault()
 ) : ViewModel() {
     private val mutableUiState = MutableStateFlow(newState(sourceUnit, targetUnit, ZERO))
 
@@ -85,6 +85,18 @@ class ConverterViewModel<U : ConverterUnit>(
             updateUnit(state.targetUnit),
             state.sourceValue
         )
+    }
+
+    fun onLocaleChanged(locale: Locale) {
+        if (this.locale == locale) return
+
+        val state = mutableUiState.value
+        val sourceValue = state.sourceValue.replace(
+            decimalSeparator(this.locale),
+            decimalSeparator(locale)
+        )
+        this.locale = locale
+        mutableUiState.value = newState(state.sourceUnit, state.targetUnit, sourceValue)
     }
 
     private fun updateSourceValue(value: String) {

@@ -31,6 +31,7 @@ fun TemperatureScreen(convertTemperature: ConvertTemperature, onBack: () -> Unit
         title = stringResource(R.string.tool_temperature),
         units = convertTemperature.units,
         uiState = uiState,
+        onLocaleChanged = viewModel::onLocaleChanged,
         unitLabel = { unit -> stringResource(unit.labelRes()) },
         onBack = onBack,
         onSourceUnitSelected = viewModel::onSourceUnitSelected,

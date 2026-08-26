@@ -31,6 +31,7 @@ fun SpeedScreen(convertSpeed: ConvertSpeed, onBack: () -> Unit) {
         title = stringResource(R.string.tool_speed),
         units = convertSpeed.units,
         uiState = uiState,
+        onLocaleChanged = viewModel::onLocaleChanged,
         unitLabel = { unit -> stringResource(unit.labelRes()) },
         onBack = onBack,
         onSourceUnitSelected = viewModel::onSourceUnitSelected,

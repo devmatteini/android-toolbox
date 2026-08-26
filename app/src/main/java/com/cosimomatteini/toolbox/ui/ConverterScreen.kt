@@ -41,12 +41,14 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -66,6 +68,7 @@ fun <U : ConverterUnit> ConverterScreen(
     title: String,
     units: List<U>,
     uiState: ConverterUiState<U>,
+    onLocaleChanged: (Locale) -> Unit,
     unitLabel: @Composable (U) -> String,
     onBack: () -> Unit,
     actions: @Composable RowScope.() -> Unit = {},
@@ -81,7 +84,10 @@ fun <U : ConverterUnit> ConverterScreen(
     onToggleSign: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-    val locale = Locale.getDefault()
+    val locale = LocalConfiguration.current.locales[0]
+    LaunchedEffect(locale) {
+        onLocaleChanged(locale)
+    }
     Scaffold(
         modifier = modifier,
         topBar = {

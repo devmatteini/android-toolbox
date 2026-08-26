@@ -31,6 +31,7 @@ fun MassScreen(convertMass: ConvertMass, onBack: () -> Unit) {
         title = stringResource(R.string.tool_mass),
         units = convertMass.units,
         uiState = uiState,
+        onLocaleChanged = viewModel::onLocaleChanged,
         unitLabel = { unit -> stringResource(unit.labelRes()) },
         onBack = onBack,
         onSourceUnitSelected = viewModel::onSourceUnitSelected,

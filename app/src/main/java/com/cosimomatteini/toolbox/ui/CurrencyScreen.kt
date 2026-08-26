@@ -15,6 +15,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -53,7 +54,7 @@ fun CurrencyScreen(
     val sourceUnit = convertCurrency.units.single { it.code == CurrencyCode.EUR }
     val targetUnit = convertCurrency.units.singleOrNull { it.code == CurrencyCode.USD }
         ?: sourceUnit
-    val locale = Locale.getDefault()
+    val locale = LocalConfiguration.current.locales[0]
     val units = orderedCurrencyUnits(convertCurrency.units, locale)
     val viewModel = viewModel<ConverterViewModel<CurrencyUnit>>(
         key = "currency",
@@ -82,6 +83,7 @@ fun CurrencyScreen(
         title = stringResource(R.string.tool_currency),
         units = units,
         uiState = uiState,
+        onLocaleChanged = viewModel::onLocaleChanged,
         unitLabel = { unit -> currencyLabel(unit, locale) },
         onBack = onBack,
         actions = {

@@ -31,6 +31,7 @@ fun VolumeScreen(convertVolume: ConvertVolume, onBack: () -> Unit) {
         title = stringResource(R.string.tool_volume),
         units = convertVolume.units,
         uiState = uiState,
+        onLocaleChanged = viewModel::onLocaleChanged,
         unitLabel = { unit -> stringResource(unit.labelRes()) },
         onBack = onBack,
         onSourceUnitSelected = viewModel::onSourceUnitSelected,
