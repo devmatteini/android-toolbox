@@ -5,10 +5,10 @@ build:
 	./gradlew :app:assembleDebug
 
 check:
-	./gradlew :buildSrc:ktlintCheck ktlintCheck test :buildSrc:test :app:assembleDebug
+	./gradlew :buildSrc:ktlintCheck ktlintCheck :currency-rates:test :app:testDebugUnitTest :buildSrc:test :app:assembleDebug
 
 test:
-	./gradlew test :buildSrc:test
+	./gradlew :currency-rates:test :app:testDebugUnitTest :buildSrc:test
 
 android-test:
 	./gradlew :app:connectedDebugAndroidTest
