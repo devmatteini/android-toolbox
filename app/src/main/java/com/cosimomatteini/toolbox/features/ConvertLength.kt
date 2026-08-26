@@ -7,6 +7,6 @@ import java.math.BigDecimal
 class ConvertLength {
     val units = LengthUnit.entries
 
-    fun convert(value: BigDecimal, source: LengthUnit, target: LengthUnit): BigDecimal =
+    operator fun invoke(value: BigDecimal, source: LengthUnit, target: LengthUnit): BigDecimal =
         convertLength(value, source, target)
 }

@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class HomeViewModel(tools: Tools) : ViewModel() {
-    private val mutableUiState = MutableStateFlow(HomeUiState(tools.catalog()))
+    private val mutableUiState = MutableStateFlow(HomeUiState(tools()))
 
     val uiState = mutableUiState.asStateFlow()
 }

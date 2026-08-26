@@ -20,7 +20,7 @@ fun LengthScreen(convertLength: ConvertLength, onBack: () -> Unit) {
                 ConverterViewModel(
                     sourceUnit = LengthUnit.Meter,
                     targetUnit = LengthUnit.Kilometer,
-                    convert = convertLength::convert
+                    convert = convertLength::invoke
                 )
             }
         }

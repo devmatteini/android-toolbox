@@ -7,6 +7,9 @@ import java.math.BigDecimal
 class ConvertTemperature {
     val units = TemperatureUnit.entries
 
-    fun convert(value: BigDecimal, source: TemperatureUnit, target: TemperatureUnit): BigDecimal =
-        convertTemperature(value, source, target)
+    operator fun invoke(
+        value: BigDecimal,
+        source: TemperatureUnit,
+        target: TemperatureUnit
+    ): BigDecimal = convertTemperature(value, source, target)
 }

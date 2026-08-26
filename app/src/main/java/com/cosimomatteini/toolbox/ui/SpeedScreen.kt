@@ -20,7 +20,7 @@ fun SpeedScreen(convertSpeed: ConvertSpeed, onBack: () -> Unit) {
                 ConverterViewModel(
                     sourceUnit = SpeedUnit.MetersPerSecond,
                     targetUnit = SpeedUnit.KilometersPerHour,
-                    convert = convertSpeed::convert
+                    convert = convertSpeed::invoke
                 )
             }
         }

@@ -20,7 +20,7 @@ fun AreaScreen(convertArea: ConvertArea, onBack: () -> Unit) {
                 ConverterViewModel(
                     sourceUnit = AreaUnit.SquareMeter,
                     targetUnit = AreaUnit.SquareKilometer,
-                    convert = convertArea::convert
+                    convert = convertArea::invoke
                 )
             }
         }

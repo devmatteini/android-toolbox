@@ -62,7 +62,7 @@ fun CurrencyScreen(
                 ConverterViewModel(
                     sourceUnit = sourceUnit,
                     targetUnit = targetUnit,
-                    convert = convertCurrency::convert
+                    convert = convertCurrency::invoke
                 )
             }
         }
@@ -70,7 +70,7 @@ fun CurrencyScreen(
     val uiState by viewModel.uiState.collectAsState()
 
     LaunchedEffect(convertCurrency) {
-        viewModel.onConverterUpdated(convertCurrency::convert) { unit ->
+        viewModel.onConverterUpdated(convertCurrency::invoke) { unit ->
             convertCurrency.units.singleOrNull { it.code == unit.code } ?: unit
         }
     }

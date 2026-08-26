@@ -20,7 +20,7 @@ fun MassScreen(convertMass: ConvertMass, onBack: () -> Unit) {
                 ConverterViewModel(
                     sourceUnit = MassUnit.Gram,
                     targetUnit = MassUnit.Kilogram,
-                    convert = convertMass::convert
+                    convert = convertMass::invoke
                 )
             }
         }

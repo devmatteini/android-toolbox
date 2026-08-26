@@ -143,7 +143,7 @@ private data class ToolPresentation(@param:StringRes val labelRes: Int, val icon
 private fun HomeScreenNarrowPreview() {
     ToolboxTheme(dynamicColor = false) {
         HomeScreen(
-            uiState = HomeUiState(Tools().catalog()),
+            uiState = HomeUiState(Tools()()),
             onToolClick = {}
         )
     }
@@ -154,7 +154,7 @@ private fun HomeScreenNarrowPreview() {
 private fun HomeScreenWidePreview() {
     ToolboxTheme(dynamicColor = false) {
         HomeScreen(
-            uiState = HomeUiState(Tools().catalog()),
+            uiState = HomeUiState(Tools()()),
             onToolClick = {}
         )
     }

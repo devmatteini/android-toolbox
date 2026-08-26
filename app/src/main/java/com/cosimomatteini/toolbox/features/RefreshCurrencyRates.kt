@@ -8,7 +8,7 @@ class RefreshCurrencyRates(
     private val currencyRates: CurrencyRatesRepository,
     private val currencyExchangeRates: CurrencyExchangeRates
 ) {
-    suspend fun refresh(): RefreshCurrencyResult = try {
+    suspend operator fun invoke(): RefreshCurrencyResult = try {
         val rates = currencyExchangeRates.load()
         currencyRates.save(rates)
         RefreshCurrencyResult.Updated(rates)

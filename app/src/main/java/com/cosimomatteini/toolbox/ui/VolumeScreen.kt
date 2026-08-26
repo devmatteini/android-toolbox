@@ -20,7 +20,7 @@ fun VolumeScreen(convertVolume: ConvertVolume, onBack: () -> Unit) {
                 ConverterViewModel(
                     sourceUnit = VolumeUnit.Millilitre,
                     targetUnit = VolumeUnit.Litre,
-                    convert = convertVolume::convert
+                    convert = convertVolume::invoke
                 )
             }
         }

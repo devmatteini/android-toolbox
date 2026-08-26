@@ -7,6 +7,6 @@ import java.math.BigDecimal
 class ConvertSpeed {
     val units = SpeedUnit.entries
 
-    fun convert(value: BigDecimal, source: SpeedUnit, target: SpeedUnit): BigDecimal =
+    operator fun invoke(value: BigDecimal, source: SpeedUnit, target: SpeedUnit): BigDecimal =
         convertSpeed(value, source, target)
 }

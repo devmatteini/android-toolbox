@@ -8,5 +8,5 @@ class LoadCurrencyRates(
     private val defaultCurrencyRates: ReadOnlyCurrencyRatesRepository,
     private val currencyRates: CurrencyRatesRepository
 ) {
-    fun load(): CurrencyRates = currencyRates.load() ?: defaultCurrencyRates.load()
+    operator fun invoke(): CurrencyRates = currencyRates.load() ?: defaultCurrencyRates.load()
 }

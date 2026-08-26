@@ -10,6 +10,6 @@ class ConvertCurrency(rates: CurrencyRates) {
     val providerName = rates.provider.name
     val rateDate = rates.rateDate
 
-    fun convert(value: BigDecimal, source: CurrencyUnit, target: CurrencyUnit): BigDecimal =
+    operator fun invoke(value: BigDecimal, source: CurrencyUnit, target: CurrencyUnit): BigDecimal =
         convertCurrency(value, source, target)
 }

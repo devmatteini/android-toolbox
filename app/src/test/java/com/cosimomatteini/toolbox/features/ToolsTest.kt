@@ -8,7 +8,7 @@ import org.junit.Test
 class ToolsTest {
     @Test
     fun `tools catalog`() {
-        val tools = Tools().catalog()
+        val tools = Tools()()
 
         assertEquals(
             setOf(
@@ -27,7 +27,7 @@ class ToolsTest {
 
     @Test
     fun `catalog uniqueness`() {
-        val tools = Tools().catalog()
+        val tools = Tools()()
 
         assertTrue(tools.map { it.id }.distinct().size == tools.size)
     }

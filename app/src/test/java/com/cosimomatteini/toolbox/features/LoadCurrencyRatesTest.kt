@@ -20,7 +20,7 @@ class LoadCurrencyRatesTest {
             InMemoryCurrencyRatesRepository(rates("2"))
         )
 
-        assertEquals(BigDecimal("2"), loadCurrencyRates.load().rates[CurrencyCode.USD])
+        assertEquals(BigDecimal("2"), loadCurrencyRates().rates[CurrencyCode.USD])
     }
 
     @Test
@@ -30,7 +30,7 @@ class LoadCurrencyRatesTest {
             InMemoryCurrencyRatesRepository()
         )
 
-        assertEquals(BigDecimal("1.1"), loadCurrencyRates.load().rates[CurrencyCode.USD])
+        assertEquals(BigDecimal("1.1"), loadCurrencyRates().rates[CurrencyCode.USD])
     }
 
     private class DefaultCurrencyRatesRepository(private val rates: CurrencyRates) :

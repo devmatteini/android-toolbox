@@ -20,7 +20,7 @@ fun TemperatureScreen(convertTemperature: ConvertTemperature, onBack: () -> Unit
                 ConverterViewModel(
                     sourceUnit = TemperatureUnit.Celsius,
                     targetUnit = TemperatureUnit.Fahrenheit,
-                    convert = convertTemperature::convert
+                    convert = convertTemperature::invoke
                 )
             }
         }

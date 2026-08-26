@@ -22,7 +22,7 @@ class RefreshCurrencyRatesTest {
             InMemoryExchangeRates(rates("1.2"))
         )
 
-        val result = refreshCurrencyRates.refresh()
+        val result = refreshCurrencyRates()
 
         assertEquals(RefreshCurrencyResult.Updated(rates("1.2")), result)
         assertEquals(rates("1.2"), repository.rates)
@@ -37,7 +37,7 @@ class RefreshCurrencyRatesTest {
             InMemoryExchangeRates(error = IllegalStateException())
         )
 
-        assertEquals(RefreshCurrencyResult.Failed, refreshCurrencyRates.refresh())
+        assertEquals(RefreshCurrencyResult.Failed, refreshCurrencyRates())
         assertEquals(persisted, repository.rates)
     }
 

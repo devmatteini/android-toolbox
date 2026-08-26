@@ -21,7 +21,7 @@ class CurrencyRatesViewModel(
 ) : ViewModel() {
     private val mutableUiState = MutableStateFlow(
         CurrencyRatesUiState(
-            rates = loadCurrencyRates.load()
+            rates = loadCurrencyRates()
         )
     )
 
@@ -35,7 +35,7 @@ class CurrencyRatesViewModel(
         if (mutableUiState.value.isRefreshing) return
         mutableUiState.update { it.copy(isRefreshing = true, message = null) }
         viewModelScope.launch {
-            when (val result = withContext(dispatcher) { refreshCurrencyRates.refresh() }) {
+            when (val result = withContext(dispatcher) { refreshCurrencyRates() }) {
                 is RefreshCurrencyResult.Updated -> updateAfterRefresh(
                     result.rates,
                     CurrencyRefreshMessage.Succeeded

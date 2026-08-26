@@ -63,7 +63,7 @@ import kotlin.math.sin
 
 @Composable
 fun CompassScreen(observeCompass: ObserveCompass, onBack: () -> Unit) {
-    val readings = remember(observeCompass) { observeCompass.readings() }
+    val readings = remember(observeCompass) { observeCompass() }
     val reading by readings.collectAsState(initial = null)
 
     CompassScreenContent(reading = reading, onBack = onBack)
