@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Toolbox</string>
+    <string name="app_version">Version %1$s</string>
+    <string name="home_more_actions">Open more actions</string>
     <string name="tools_title">Tools</string>
     <string name="tool_length">Length</string>
     <string name="tool_mass">Weight</string>
