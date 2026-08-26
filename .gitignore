@@ -1,11 +1,9 @@
 *.iml
 .gradle
+/build
 /local.properties
 .idea/
 .DS_Store
-**/build/
-!buildSrc/src/test/kotlin/com/cosimomatteini/toolbox/build/
-!buildSrc/src/test/kotlin/com/cosimomatteini/toolbox/build/**
 /captures
 .externalNativeBuild
 .cxx

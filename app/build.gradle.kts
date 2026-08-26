@@ -1,4 +1,4 @@
-import com.cosimomatteini.toolbox.build.GenerateCurrencyRatesTask
+import com.cosimomatteini.toolbox.tasks.GenerateCurrencyRatesTask
 import java.util.Properties
 
 plugins {
