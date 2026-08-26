@@ -8,10 +8,10 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-class CurrencyRatesFileCodecTest {
+class CurrencyRatesCodecTest {
     @Test
     fun `generates packaged schema`() {
-        val json = CurrencyRatesFileCodec.encode(rates())
+        val json = CurrencyRatesCodec.encode(rates())
 
         assertTrue(json.contains("\"schemaVersion\": 1"))
         assertTrue(json.contains("\"id\": \"ECB\""))
@@ -21,8 +21,8 @@ class CurrencyRatesFileCodecTest {
 
     @Test
     fun `decodes packaged schema into typed rates`() {
-        val json = CurrencyRatesFileCodec.encode(rates())
-        val decoded = CurrencyRatesFileCodec.decode(json)
+        val json = CurrencyRatesCodec.encode(rates())
+        val decoded = CurrencyRatesCodec.decode(json)
 
         assertEquals(CurrencyCode.EUR, decoded.base)
         assertEquals(Instant.parse("2026-08-25T12:00:00Z"), decoded.downloadedAt)
@@ -32,12 +32,12 @@ class CurrencyRatesFileCodecTest {
 
     @Test(expected = IllegalArgumentException::class)
     fun `rejects invalid packaged rate`() {
-        CurrencyRatesFileCodec.decode(
-            CurrencyRatesFileCodec.encode(rates()).replace("\"EUR\": \"1\"", "\"EUR\": \"0\"")
+        CurrencyRatesCodec.decode(
+            CurrencyRatesCodec.encode(rates()).replace("\"EUR\": \"1\"", "\"EUR\": \"0\"")
         )
     }
 
-    private fun rates() = CurrencyRatesFile.create(
+    private fun rates() = CurrencyRates.create(
         provider = CurrencyRateProvider.EuropeanCentralBank,
         sourceUrl = URI("https://example.test/rates"),
         downloadedAt = Instant.parse("2026-08-25T12:00:00Z"),

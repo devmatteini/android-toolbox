@@ -79,7 +79,8 @@ class MainActivity : ComponentActivity() {
 
                     AppScreen.Currency -> {
                         CurrencyScreen(
-                            currencyRates = appContainer.currencyRates,
+                            loadCurrencyRates = appContainer.loadCurrencyRates,
+                            refreshCurrencyRates = appContainer.refreshCurrencyRates,
                             onBack = { screen = AppScreen.Home }
                         )
                     }

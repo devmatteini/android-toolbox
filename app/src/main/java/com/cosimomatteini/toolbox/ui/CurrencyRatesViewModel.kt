@@ -2,8 +2,9 @@ package com.cosimomatteini.toolbox.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cosimomatteini.toolbox.currencyrates.CurrencyRatesFile
-import com.cosimomatteini.toolbox.features.CurrencyRates
+import com.cosimomatteini.toolbox.currencyrates.CurrencyRates
+import com.cosimomatteini.toolbox.features.LoadCurrencyRates
+import com.cosimomatteini.toolbox.features.RefreshCurrencyRates
 import com.cosimomatteini.toolbox.features.RefreshCurrencyResult
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -14,12 +15,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class CurrencyRatesViewModel(
-    private val currencyRates: CurrencyRates,
+    private val loadCurrencyRates: LoadCurrencyRates,
+    private val refreshCurrencyRates: RefreshCurrencyRates,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
     private val mutableUiState = MutableStateFlow(
         CurrencyRatesUiState(
-            rates = currencyRates.load()
+            rates = loadCurrencyRates.load()
         )
     )
 
@@ -33,7 +35,7 @@ class CurrencyRatesViewModel(
         if (mutableUiState.value.isRefreshing) return
         mutableUiState.update { it.copy(isRefreshing = true, message = null) }
         viewModelScope.launch {
-            when (val result = withContext(dispatcher) { currencyRates.refresh() }) {
+            when (val result = withContext(dispatcher) { refreshCurrencyRates.refresh() }) {
                 is RefreshCurrencyResult.Updated -> updateAfterRefresh(
                     result.rates,
                     CurrencyRefreshMessage.Succeeded
@@ -46,7 +48,7 @@ class CurrencyRatesViewModel(
         }
     }
 
-    private fun updateAfterRefresh(rates: CurrencyRatesFile?, message: CurrencyRefreshMessage?) {
+    private fun updateAfterRefresh(rates: CurrencyRates?, message: CurrencyRefreshMessage?) {
         mutableUiState.update {
             it.copy(
                 rates = rates ?: it.rates,
@@ -58,7 +60,7 @@ class CurrencyRatesViewModel(
 }
 
 data class CurrencyRatesUiState(
-    val rates: CurrencyRatesFile,
+    val rates: CurrencyRates,
     val isRefreshing: Boolean = false,
     val message: CurrencyRefreshMessage? = null
 )

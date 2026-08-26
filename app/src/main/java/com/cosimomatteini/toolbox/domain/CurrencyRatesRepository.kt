@@ -1,13 +1,13 @@
 package com.cosimomatteini.toolbox.domain
 
-import com.cosimomatteini.toolbox.currencyrates.CurrencyRatesFile
+import com.cosimomatteini.toolbox.currencyrates.CurrencyRates
 
 interface ReadOnlyCurrencyRatesRepository {
-    fun load(): CurrencyRatesFile
+    fun load(): CurrencyRates
 }
 
 interface CurrencyRatesRepository {
-    fun load(): CurrencyRatesFile?
+    fun load(): CurrencyRates?
 
-    fun save(rates: CurrencyRatesFile)
+    fun save(rates: CurrencyRates)
 }

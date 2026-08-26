@@ -2,7 +2,7 @@ package com.cosimomatteini.toolbox.infrastructure
 
 import com.cosimomatteini.toolbox.currencyrates.CurrencyCode
 import com.cosimomatteini.toolbox.currencyrates.CurrencyRateProvider
-import com.cosimomatteini.toolbox.currencyrates.CurrencyRatesFile
+import com.cosimomatteini.toolbox.currencyrates.CurrencyRates
 import java.io.File
 import java.math.BigDecimal
 import java.net.URI
@@ -35,7 +35,7 @@ class FileCurrencyRatesRepositoryTest {
         assertEquals(original, failingStore.load())
     }
 
-    private fun rates(rate: String) = CurrencyRatesFile.create(
+    private fun rates(rate: String) = CurrencyRates.create(
         provider = CurrencyRateProvider.EuropeanCentralBank,
         sourceUrl = URI("https://example.test/rates"),
         downloadedAt = Instant.parse("2026-08-25T12:00:00Z"),

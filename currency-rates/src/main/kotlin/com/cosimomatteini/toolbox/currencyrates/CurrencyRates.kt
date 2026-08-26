@@ -32,7 +32,7 @@ enum class CurrencyRateProvider(val id: String, val displayName: String) {
 }
 
 @ConsistentCopyVisibility
-data class CurrencyRatesFile private constructor(
+data class CurrencyRates private constructor(
     val provider: CurrencyRateProvider,
     val sourceUrl: URI,
     val downloadedAt: Instant,
@@ -48,7 +48,7 @@ data class CurrencyRatesFile private constructor(
             rateDate: LocalDate,
             base: CurrencyCode,
             rates: Map<CurrencyCode, BigDecimal>
-        ): CurrencyRatesFile {
+        ): CurrencyRates {
             require(provider == CurrencyRateProvider.EuropeanCentralBank) {
                 "Currency-rates provider must be $CURRENCY_RATES_PROVIDER_ID"
             }
@@ -65,7 +65,7 @@ data class CurrencyRatesFile private constructor(
                     "Currency rate for ${code.value} must be positive"
                 }
             }
-            return CurrencyRatesFile(
+            return CurrencyRates(
                 provider = provider,
                 sourceUrl = sourceUrl,
                 downloadedAt = downloadedAt,
@@ -79,18 +79,18 @@ data class CurrencyRatesFile private constructor(
     }
 }
 
-object CurrencyRatesFileCodec {
+object CurrencyRatesCodec {
     private val json = Json {
         ignoreUnknownKeys = true
         prettyPrint = true
     }
 
-    fun decode(value: String): CurrencyRatesFile =
-        json.decodeFromString<CurrencyRatesFileDto>(value).toFile()
+    fun decode(value: String): CurrencyRates =
+        json.decodeFromString<CurrencyRatesFileDto>(value).toCurrencyRates()
 
-    fun encode(file: CurrencyRatesFile): String = json.encodeToString(file.toDto()) + "\n"
+    fun encode(rates: CurrencyRates): String = json.encodeToString(rates.toDto()) + "\n"
 
-    private fun CurrencyRatesFileDto.toFile(): CurrencyRatesFile {
+    private fun CurrencyRatesFileDto.toCurrencyRates(): CurrencyRates {
         require(schemaVersion == SCHEMA_VERSION) {
             "Unsupported currency-rates schema version: $schemaVersion"
         }
@@ -100,7 +100,7 @@ object CurrencyRatesFileCodec {
         require(provider.name == CURRENCY_RATES_PROVIDER_NAME) {
             "Currency-rates provider name is invalid"
         }
-        return CurrencyRatesFile.create(
+        return CurrencyRates.create(
             provider = CurrencyRateProvider.EuropeanCentralBank,
             sourceUrl = URI(sourceUrl),
             downloadedAt = Instant.parse(downloadedAt),
@@ -115,7 +115,7 @@ object CurrencyRatesFileCodec {
         )
     }
 
-    private fun CurrencyRatesFile.toDto(): CurrencyRatesFileDto = CurrencyRatesFileDto(
+    private fun CurrencyRates.toDto(): CurrencyRatesFileDto = CurrencyRatesFileDto(
         schemaVersion = SCHEMA_VERSION,
         provider = CurrencyRateProviderDto(provider.id, provider.displayName),
         sourceUrl = sourceUrl.toString(),

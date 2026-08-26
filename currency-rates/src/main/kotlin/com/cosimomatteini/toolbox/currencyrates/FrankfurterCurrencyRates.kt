@@ -12,14 +12,15 @@ data class FrankfurterCurrencyRates(
     val rateDate: LocalDate,
     val rates: Map<CurrencyCode, BigDecimal>
 ) {
-    fun toFile(sourceUrl: URI, downloadedAt: Instant): CurrencyRatesFile = CurrencyRatesFile.create(
-        provider = CurrencyRateProvider.EuropeanCentralBank,
-        sourceUrl = sourceUrl,
-        downloadedAt = downloadedAt,
-        rateDate = rateDate,
-        base = CurrencyCode.EUR,
-        rates = rates
-    )
+    fun toCurrencyRates(sourceUrl: URI, downloadedAt: Instant): CurrencyRates =
+        CurrencyRates.create(
+            provider = CurrencyRateProvider.EuropeanCentralBank,
+            sourceUrl = sourceUrl,
+            downloadedAt = downloadedAt,
+            rateDate = rateDate,
+            base = CurrencyCode.EUR,
+            rates = rates
+        )
 
     companion object {
         private val json = Json { ignoreUnknownKeys = true }

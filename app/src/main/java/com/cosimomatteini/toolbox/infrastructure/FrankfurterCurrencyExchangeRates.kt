@@ -2,7 +2,7 @@ package com.cosimomatteini.toolbox.infrastructure
 
 import com.cosimomatteini.toolbox.currencyrates.CURRENCY_RATES_PROVIDER_ID
 import com.cosimomatteini.toolbox.currencyrates.CurrencyCode
-import com.cosimomatteini.toolbox.currencyrates.CurrencyRatesFile
+import com.cosimomatteini.toolbox.currencyrates.CurrencyRates
 import com.cosimomatteini.toolbox.currencyrates.FrankfurterCurrencyRates
 import com.cosimomatteini.toolbox.domain.CurrencyExchangeRates
 import java.net.HttpURLConnection
@@ -16,7 +16,7 @@ class FrankfurterCurrencyExchangeRates(
     private val clock: Clock = Clock.systemUTC(),
     private val sourceUrl: URI = URI(FRANKFURTER_URL)
 ) : CurrencyExchangeRates {
-    override suspend fun load(): CurrencyRatesFile = withContext(Dispatchers.IO) {
+    override suspend fun load(): CurrencyRates = withContext(Dispatchers.IO) {
         val connection = sourceUrl.toURL().openConnection() as HttpURLConnection
         try {
             connection.connectTimeout = TIMEOUT_MILLIS
@@ -29,7 +29,7 @@ class FrankfurterCurrencyExchangeRates(
             val response = connection.inputStream.bufferedReader(StandardCharsets.UTF_8).use {
                 it.readText()
             }
-            FrankfurterCurrencyRates.parse(response).toFile(sourceUrl, clock.instant())
+            FrankfurterCurrencyRates.parse(response).toCurrencyRates(sourceUrl, clock.instant())
         } finally {
             connection.disconnect()
         }

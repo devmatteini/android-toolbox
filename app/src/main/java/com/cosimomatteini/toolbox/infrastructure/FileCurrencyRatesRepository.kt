@@ -1,8 +1,8 @@
 package com.cosimomatteini.toolbox.infrastructure
 
 import com.cosimomatteini.toolbox.currencyrates.CURRENCY_RATES_FILE_NAME
-import com.cosimomatteini.toolbox.currencyrates.CurrencyRatesFile
-import com.cosimomatteini.toolbox.currencyrates.CurrencyRatesFileCodec
+import com.cosimomatteini.toolbox.currencyrates.CurrencyRates
+import com.cosimomatteini.toolbox.currencyrates.CurrencyRatesCodec
 import com.cosimomatteini.toolbox.domain.CurrencyRatesRepository
 import java.io.File
 import java.nio.charset.StandardCharsets
@@ -16,12 +16,12 @@ class FileCurrencyRatesRepository(
 ) : CurrencyRatesRepository {
     private val ratesFile = File(directory, CURRENCY_RATES_FILE_NAME)
 
-    override fun load(): CurrencyRatesFile? = runCatching {
-        CurrencyRatesFileCodec.decode(ratesFile.readText(StandardCharsets.UTF_8))
+    override fun load(): CurrencyRates? = runCatching {
+        CurrencyRatesCodec.decode(ratesFile.readText(StandardCharsets.UTF_8))
     }.getOrNull()
 
-    override fun save(rates: CurrencyRatesFile) {
-        writeAtomically(ratesFile, CurrencyRatesFileCodec.encode(rates))
+    override fun save(rates: CurrencyRates) {
+        writeAtomically(ratesFile, CurrencyRatesCodec.encode(rates))
     }
 
     private companion object {

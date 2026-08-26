@@ -1,7 +1,7 @@
 package com.cosimomatteini.toolbox.domain
 
-import com.cosimomatteini.toolbox.currencyrates.CurrencyRatesFile
+import com.cosimomatteini.toolbox.currencyrates.CurrencyRates
 
 interface CurrencyExchangeRates {
-    suspend fun load(): CurrencyRatesFile
+    suspend fun load(): CurrencyRates
 }

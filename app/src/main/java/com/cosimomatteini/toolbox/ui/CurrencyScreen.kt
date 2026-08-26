@@ -25,7 +25,8 @@ import com.cosimomatteini.toolbox.R
 import com.cosimomatteini.toolbox.currencyrates.CurrencyCode
 import com.cosimomatteini.toolbox.domain.CurrencyUnit
 import com.cosimomatteini.toolbox.features.ConvertCurrency
-import com.cosimomatteini.toolbox.features.CurrencyRates
+import com.cosimomatteini.toolbox.features.LoadCurrencyRates
+import com.cosimomatteini.toolbox.features.RefreshCurrencyRates
 import java.text.Collator
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -34,10 +35,16 @@ import java.util.Currency
 import java.util.Locale
 
 @Composable
-fun CurrencyScreen(currencyRates: CurrencyRates, onBack: () -> Unit) {
+fun CurrencyScreen(
+    loadCurrencyRates: LoadCurrencyRates,
+    refreshCurrencyRates: RefreshCurrencyRates,
+    onBack: () -> Unit
+) {
     val ratesViewModel = viewModel<CurrencyRatesViewModel>(
         key = "currencyRates",
-        factory = viewModelFactory { initializer { CurrencyRatesViewModel(currencyRates) } }
+        factory = viewModelFactory {
+            initializer { CurrencyRatesViewModel(loadCurrencyRates, refreshCurrencyRates) }
+        }
     )
     val ratesUiState by ratesViewModel.uiState.collectAsState()
     val context = LocalContext.current

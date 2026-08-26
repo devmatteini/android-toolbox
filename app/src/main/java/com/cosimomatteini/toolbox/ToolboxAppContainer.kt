@@ -7,8 +7,9 @@ import com.cosimomatteini.toolbox.features.ConvertMass
 import com.cosimomatteini.toolbox.features.ConvertSpeed
 import com.cosimomatteini.toolbox.features.ConvertTemperature
 import com.cosimomatteini.toolbox.features.ConvertVolume
-import com.cosimomatteini.toolbox.features.CurrencyRates
+import com.cosimomatteini.toolbox.features.LoadCurrencyRates
 import com.cosimomatteini.toolbox.features.ObserveCompass
+import com.cosimomatteini.toolbox.features.RefreshCurrencyRates
 import com.cosimomatteini.toolbox.features.Tools
 import com.cosimomatteini.toolbox.infrastructure.AndroidCompassSensor
 import com.cosimomatteini.toolbox.infrastructure.FileCurrencyRatesRepository
@@ -19,11 +20,12 @@ class ToolboxAppContainer(context: Context) {
     val convertArea = ConvertArea()
     private val defaultCurrencyRates = PackagedCurrencyRates(context.assets)
     private val fileCurrencyRates = FileCurrencyRatesRepository(context.filesDir)
-    val currencyRates = CurrencyRates(
+    val loadCurrencyRates = LoadCurrencyRates(
         defaultCurrencyRates,
-        fileCurrencyRates,
-        FrankfurterCurrencyExchangeRates()
+        fileCurrencyRates
     )
+    val refreshCurrencyRates =
+        RefreshCurrencyRates(fileCurrencyRates, FrankfurterCurrencyExchangeRates())
     val convertLength = ConvertLength()
     val convertMass = ConvertMass()
     val convertSpeed = ConvertSpeed()
