@@ -263,7 +263,7 @@
 - Rethrow `CancellationException` from currency refreshes.
 - Continue representing ordinary refresh failures as a non-blocking failure result.
 
-## 20. Consume Currency Refresh Messages Once
+## 20. Consume Currency Refresh Messages Once (Done)
 
 - Clear the refresh message after its toast is displayed.
 - Do not replay a prior refresh toast after navigation or activity recreation.

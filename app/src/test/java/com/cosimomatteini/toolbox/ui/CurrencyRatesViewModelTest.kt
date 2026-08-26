@@ -56,6 +56,39 @@ class CurrencyRatesViewModelTest {
         }
     }
 
+    @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
+    @Test
+    fun `clears a refresh message after it is shown`() = runTest {
+        val dispatcher = StandardTestDispatcher(testScheduler)
+        Dispatchers.setMain(dispatcher)
+        try {
+            val rates = rates()
+            val viewModel = CurrencyRatesViewModel(
+                loadCurrencyRates = LoadCurrencyRates(
+                    DefaultRatesRepository(rates),
+                    RatesRepository()
+                ),
+                refreshCurrencyRates = RefreshCurrencyRates(
+                    RatesRepository(),
+                    ExchangeRates(rates)
+                ),
+                dispatcher = dispatcher
+            )
+            advanceUntilIdle()
+
+            viewModel.onRefreshRequested()
+            advanceUntilIdle()
+
+            assertEquals(CurrencyRefreshMessage.Succeeded, viewModel.uiState.value.message)
+
+            viewModel.onRefreshMessageShown()
+
+            assertNull(viewModel.uiState.value.message)
+        } finally {
+            Dispatchers.resetMain()
+        }
+    }
+
     private class DefaultRatesRepository(private val rates: CurrencyRates) :
         ReadOnlyCurrencyRatesRepository {
         override fun load() = rates

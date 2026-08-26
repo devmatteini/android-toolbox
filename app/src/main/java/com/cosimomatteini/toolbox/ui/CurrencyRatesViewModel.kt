@@ -34,6 +34,10 @@ class CurrencyRatesViewModel(
         refresh()
     }
 
+    fun onRefreshMessageShown() {
+        mutableUiState.update { it.copy(message = null) }
+    }
+
     private fun refresh() {
         if (mutableUiState.value.isLoading || mutableUiState.value.isRefreshing) return
         mutableUiState.update { it.copy(isRefreshing = true, message = null) }

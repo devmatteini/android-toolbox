@@ -87,8 +87,11 @@ fun CurrencyScreen(
             convertCurrency.units.singleOrNull { it.code == unit.code } ?: unit
         }
     }
-    LaunchedEffect(refreshMessage) {
-        refreshMessage?.let { Toast.makeText(context, it, Toast.LENGTH_SHORT).show() }
+    LaunchedEffect(ratesUiState.message) {
+        refreshMessage?.let { message ->
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+            ratesViewModel.onRefreshMessageShown()
+        }
     }
 
     ConverterScreen(
