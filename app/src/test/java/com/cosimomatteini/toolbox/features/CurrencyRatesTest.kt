@@ -1,14 +1,15 @@
 package com.cosimomatteini.toolbox.features
 
-import com.cosimomatteini.toolbox.currencyrates.CURRENCY_RATES_BASE
-import com.cosimomatteini.toolbox.currencyrates.CURRENCY_RATES_PROVIDER_ID
-import com.cosimomatteini.toolbox.currencyrates.CURRENCY_RATES_PROVIDER_NAME
-import com.cosimomatteini.toolbox.currencyrates.CURRENCY_RATES_SCHEMA_VERSION
+import com.cosimomatteini.toolbox.currencyrates.CurrencyCode
 import com.cosimomatteini.toolbox.currencyrates.CurrencyRateProvider
 import com.cosimomatteini.toolbox.currencyrates.CurrencyRatesFile
 import com.cosimomatteini.toolbox.domain.CurrencyExchangeRates
 import com.cosimomatteini.toolbox.domain.CurrencyRatesRepository
 import com.cosimomatteini.toolbox.domain.ReadOnlyCurrencyRatesRepository
+import java.math.BigDecimal
+import java.net.URI
+import java.time.Instant
+import java.time.LocalDate
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -19,14 +20,14 @@ class CurrencyRatesTest {
         val currencyRates =
             currencyRates(currencyRates = InMemoryCurrencyRatesRepository(rates = rates("2")))
 
-        assertEquals("2", currencyRates.load().rates["USD"])
+        assertEquals(BigDecimal("2"), currencyRates.load().rates[CurrencyCode.USD])
     }
 
     @Test
     fun `no currency rates, fallback to default rates`() {
         val currencyRates = currencyRates(currencyRates = InMemoryCurrencyRatesRepository())
 
-        assertEquals("1.1", currencyRates.load().rates["USD"])
+        assertEquals(BigDecimal("1.1"), currencyRates.load().rates[CurrencyCode.USD])
     }
 
     @Test
@@ -72,17 +73,16 @@ class CurrencyRatesTest {
     private fun rates(
         rate: String,
         downloadedAt: String = "2026-08-25T12:00:00Z"
-    ): CurrencyRatesFile = CurrencyRatesFile(
-        schemaVersion = CURRENCY_RATES_SCHEMA_VERSION,
-        provider = CurrencyRateProvider(
-            CURRENCY_RATES_PROVIDER_ID,
-            CURRENCY_RATES_PROVIDER_NAME
-        ),
-        sourceUrl = "https://example.test/rates",
-        downloadedAt = downloadedAt,
-        rateDate = "2026-08-25",
-        base = CURRENCY_RATES_BASE,
-        rates = mapOf("EUR" to "1", "USD" to rate)
+    ): CurrencyRatesFile = CurrencyRatesFile.create(
+        provider = CurrencyRateProvider.EuropeanCentralBank,
+        sourceUrl = URI("https://example.test/rates"),
+        downloadedAt = Instant.parse(downloadedAt),
+        rateDate = LocalDate.parse("2026-08-25"),
+        base = CurrencyCode.EUR,
+        rates = mapOf(
+            CurrencyCode.EUR to BigDecimal.ONE,
+            CurrencyCode.USD to BigDecimal(rate)
+        )
     )
 
     private class DefaultCurrencyRatesRepository(private val rates: CurrencyRatesFile) :

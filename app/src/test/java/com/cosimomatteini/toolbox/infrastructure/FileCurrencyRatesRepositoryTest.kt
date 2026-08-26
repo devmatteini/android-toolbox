@@ -1,13 +1,14 @@
 package com.cosimomatteini.toolbox.infrastructure
 
-import com.cosimomatteini.toolbox.currencyrates.CURRENCY_RATES_BASE
-import com.cosimomatteini.toolbox.currencyrates.CURRENCY_RATES_PROVIDER_ID
-import com.cosimomatteini.toolbox.currencyrates.CURRENCY_RATES_PROVIDER_NAME
-import com.cosimomatteini.toolbox.currencyrates.CURRENCY_RATES_SCHEMA_VERSION
+import com.cosimomatteini.toolbox.currencyrates.CurrencyCode
 import com.cosimomatteini.toolbox.currencyrates.CurrencyRateProvider
 import com.cosimomatteini.toolbox.currencyrates.CurrencyRatesFile
 import java.io.File
+import java.math.BigDecimal
+import java.net.URI
 import java.nio.file.Files
+import java.time.Instant
+import java.time.LocalDate
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
@@ -34,14 +35,16 @@ class FileCurrencyRatesRepositoryTest {
         assertEquals(original, failingStore.load())
     }
 
-    private fun rates(rate: String) = CurrencyRatesFile(
-        schemaVersion = CURRENCY_RATES_SCHEMA_VERSION,
-        provider = CurrencyRateProvider(CURRENCY_RATES_PROVIDER_ID, CURRENCY_RATES_PROVIDER_NAME),
-        sourceUrl = "https://example.test/rates",
-        downloadedAt = "2026-08-25T12:00:00Z",
-        rateDate = "2026-08-25",
-        base = CURRENCY_RATES_BASE,
-        rates = mapOf("EUR" to "1", "USD" to rate)
+    private fun rates(rate: String) = CurrencyRatesFile.create(
+        provider = CurrencyRateProvider.EuropeanCentralBank,
+        sourceUrl = URI("https://example.test/rates"),
+        downloadedAt = Instant.parse("2026-08-25T12:00:00Z"),
+        rateDate = LocalDate.parse("2026-08-25"),
+        base = CurrencyCode.EUR,
+        rates = mapOf(
+            CurrencyCode.EUR to BigDecimal.ONE,
+            CurrencyCode.USD to BigDecimal(rate)
+        )
     )
 
     private fun withDirectory(block: (File) -> Unit) {

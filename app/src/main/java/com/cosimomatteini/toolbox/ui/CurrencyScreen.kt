@@ -22,7 +22,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.cosimomatteini.toolbox.R
-import com.cosimomatteini.toolbox.currencyrates.CURRENCY_RATES_BASE
+import com.cosimomatteini.toolbox.currencyrates.CurrencyCode
 import com.cosimomatteini.toolbox.domain.CurrencyUnit
 import com.cosimomatteini.toolbox.features.ConvertCurrency
 import com.cosimomatteini.toolbox.features.CurrencyRates
@@ -43,8 +43,9 @@ fun CurrencyScreen(currencyRates: CurrencyRates, onBack: () -> Unit) {
     val context = LocalContext.current
     val refreshMessage = ratesUiState.message?.let { stringResource(it.stringRes) }
     val convertCurrency = remember(ratesUiState.rates) { ConvertCurrency(ratesUiState.rates) }
-    val sourceUnit = convertCurrency.units.single { it.code == CURRENCY_RATES_BASE }
-    val targetUnit = convertCurrency.units.singleOrNull { it.code == USD } ?: sourceUnit
+    val sourceUnit = convertCurrency.units.single { it.code == CurrencyCode.EUR }
+    val targetUnit = convertCurrency.units.singleOrNull { it.code == CurrencyCode.USD }
+        ?: sourceUnit
     val locale = Locale.getDefault()
     val units = orderedCurrencyUnits(convertCurrency.units, locale)
     val viewModel = viewModel<ConverterViewModel<CurrencyUnit>>(
@@ -115,25 +116,20 @@ fun CurrencyScreen(currencyRates: CurrencyRates, onBack: () -> Unit) {
 }
 
 internal fun currencyLabel(unit: CurrencyUnit, locale: Locale): String =
-    "${currencyName(unit.code, locale)} (${unit.code})"
+    "${currencyName(unit.code, locale)} (${unit.code.value})"
 
 internal fun orderedCurrencyUnits(units: List<CurrencyUnit>, locale: Locale): List<CurrencyUnit> {
     val collator = Collator.getInstance(locale)
     return units.sortedWith(compareBy(collator) { currencyName(it.code, locale) })
 }
 
-internal fun formatSourceDate(value: String, locale: Locale): String =
-    LocalDate.parse(value).format(
-        DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(locale)
-    )
+internal fun formatSourceDate(value: LocalDate, locale: Locale): String =
+    DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
+        .withLocale(locale)
+        .format(value)
 
-private fun currencyName(code: String, locale: Locale): String = try {
-    Currency.getInstance(code).getDisplayName(locale)
-} catch (_: IllegalArgumentException) {
-    code
-}
-
-private const val USD = "USD"
+private fun currencyName(code: CurrencyCode, locale: Locale): String =
+    Currency.getInstance(code.value).getDisplayName(locale)
 
 private val CurrencyRefreshMessage.stringRes: Int
     get() = when (this) {

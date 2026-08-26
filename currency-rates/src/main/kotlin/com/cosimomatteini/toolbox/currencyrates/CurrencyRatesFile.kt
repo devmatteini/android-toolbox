@@ -4,29 +4,80 @@ import java.math.BigDecimal
 import java.net.URI
 import java.time.Instant
 import java.time.LocalDate
+import java.util.Collections
 import java.util.Currency
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
-const val CURRENCY_RATES_SCHEMA_VERSION = 1
 const val CURRENCY_RATES_PROVIDER_ID = "ECB"
 const val CURRENCY_RATES_PROVIDER_NAME = "European Central Bank"
-const val CURRENCY_RATES_BASE = "EUR"
 const val CURRENCY_RATES_FILE_NAME = "currency-rates.json"
 
-@Serializable
-data class CurrencyRatesFile(
-    val schemaVersion: Int,
-    val provider: CurrencyRateProvider,
-    val sourceUrl: String,
-    val downloadedAt: String,
-    val rateDate: String,
-    val base: String,
-    val rates: Map<String, String>
-)
+@JvmInline
+value class CurrencyCode private constructor(val value: String) {
+    companion object {
+        val EUR = CurrencyCode("EUR")
+        val USD = CurrencyCode("USD")
 
-@Serializable
-data class CurrencyRateProvider(val id: String, val name: String)
+        fun parse(value: String): CurrencyCode = try {
+            CurrencyCode(Currency.getInstance(value).currencyCode)
+        } catch (_: IllegalArgumentException) {
+            throw IllegalArgumentException("Invalid ISO 4217 currency code: $value")
+        }
+    }
+}
+
+enum class CurrencyRateProvider(val id: String, val displayName: String) {
+    EuropeanCentralBank(CURRENCY_RATES_PROVIDER_ID, CURRENCY_RATES_PROVIDER_NAME)
+}
+
+@ConsistentCopyVisibility
+data class CurrencyRatesFile private constructor(
+    val provider: CurrencyRateProvider,
+    val sourceUrl: URI,
+    val downloadedAt: Instant,
+    val rateDate: LocalDate,
+    val base: CurrencyCode,
+    val rates: Map<CurrencyCode, BigDecimal>
+) {
+    companion object {
+        fun create(
+            provider: CurrencyRateProvider,
+            sourceUrl: URI,
+            downloadedAt: Instant,
+            rateDate: LocalDate,
+            base: CurrencyCode,
+            rates: Map<CurrencyCode, BigDecimal>
+        ): CurrencyRatesFile {
+            require(provider == CurrencyRateProvider.EuropeanCentralBank) {
+                "Currency-rates provider must be $CURRENCY_RATES_PROVIDER_ID"
+            }
+            require(base == CurrencyCode.EUR) {
+                "Currency-rates base must be ${CurrencyCode.EUR.value}"
+            }
+            require(rates.isNotEmpty()) { "Currency-rates must contain rates" }
+            require(rates[base]?.compareTo(BigDecimal.ONE) == 0) {
+                "Currency-rates ${base.value} rate must be exactly 1"
+            }
+            require(sourceUrl.isAbsolute) { "Currency-rates source URL must be absolute" }
+            rates.forEach { (code, rate) ->
+                require(rate > BigDecimal.ZERO) {
+                    "Currency rate for ${code.value} must be positive"
+                }
+            }
+            return CurrencyRatesFile(
+                provider = provider,
+                sourceUrl = sourceUrl,
+                downloadedAt = downloadedAt,
+                rateDate = rateDate,
+                base = base,
+                rates = Collections.unmodifiableMap(
+                    rates.toSortedMap(compareBy(CurrencyCode::value))
+                )
+            )
+        }
+    }
+}
 
 object CurrencyRatesFileCodec {
     private val json = Json {
@@ -35,46 +86,62 @@ object CurrencyRatesFileCodec {
     }
 
     fun decode(value: String): CurrencyRatesFile =
-        validate(json.decodeFromString<CurrencyRatesFile>(value))
+        json.decodeFromString<CurrencyRatesFileDto>(value).toFile()
 
-    fun encode(file: CurrencyRatesFile): String = json.encodeToString(validate(file)) + "\n"
+    fun encode(file: CurrencyRatesFile): String = json.encodeToString(file.toDto()) + "\n"
 
-    fun validate(file: CurrencyRatesFile): CurrencyRatesFile {
-        require(file.schemaVersion == CURRENCY_RATES_SCHEMA_VERSION) {
-            "Unsupported currency-rates schema version: ${file.schemaVersion}"
+    private fun CurrencyRatesFileDto.toFile(): CurrencyRatesFile {
+        require(schemaVersion == SCHEMA_VERSION) {
+            "Unsupported currency-rates schema version: $schemaVersion"
         }
-        require(file.provider.id == CURRENCY_RATES_PROVIDER_ID) {
+        require(provider.id == CURRENCY_RATES_PROVIDER_ID) {
             "Currency-rates provider must be $CURRENCY_RATES_PROVIDER_ID"
         }
-        require(file.provider.name == CURRENCY_RATES_PROVIDER_NAME) {
+        require(provider.name == CURRENCY_RATES_PROVIDER_NAME) {
             "Currency-rates provider name is invalid"
         }
-        require(file.base == CURRENCY_RATES_BASE) {
-            "Currency-rates base must be $CURRENCY_RATES_BASE"
-        }
-        require(file.rates.isNotEmpty()) { "Currency-rates must contain rates" }
-        require(file.rates[CURRENCY_RATES_BASE] == "1") {
-            "Currency-rates $CURRENCY_RATES_BASE rate must be exactly 1"
-        }
-        require(URI(file.sourceUrl).isAbsolute) { "Currency-rates source URL must be absolute" }
-        Instant.parse(file.downloadedAt)
-        LocalDate.parse(file.rateDate)
-        file.rates.forEach { (code, rate) ->
-            requireCurrencyCode(code)
-            require(DECIMAL.matches(rate) && BigDecimal(rate) > BigDecimal.ZERO) {
-                "Currency rate for $code must be a positive decimal string"
-            }
-        }
-        return file
+        return CurrencyRatesFile.create(
+            provider = CurrencyRateProvider.EuropeanCentralBank,
+            sourceUrl = URI(sourceUrl),
+            downloadedAt = Instant.parse(downloadedAt),
+            rateDate = LocalDate.parse(rateDate),
+            base = CurrencyCode.parse(base),
+            rates = rates.map { (code, rate) ->
+                require(DECIMAL.matches(rate)) {
+                    "Currency rate for $code must be a positive decimal string"
+                }
+                CurrencyCode.parse(code) to BigDecimal(rate)
+            }.toMap()
+        )
     }
 
-    private fun requireCurrencyCode(code: String) {
-        try {
-            Currency.getInstance(code)
-        } catch (_: IllegalArgumentException) {
-            throw IllegalArgumentException("Invalid ISO 4217 currency code: $code")
+    private fun CurrencyRatesFile.toDto(): CurrencyRatesFileDto = CurrencyRatesFileDto(
+        schemaVersion = SCHEMA_VERSION,
+        provider = CurrencyRateProviderDto(provider.id, provider.displayName),
+        sourceUrl = sourceUrl.toString(),
+        downloadedAt = downloadedAt.toString(),
+        rateDate = rateDate.toString(),
+        base = base.value,
+        rates = rates.mapKeys { it.key.value }.mapValues { (_, rate) ->
+            rate.stripTrailingZeros().toPlainString()
         }
-    }
+    )
 
     private val DECIMAL = Regex("(?:0|[1-9]\\d*)(?:\\.\\d+)?")
+
+    private const val SCHEMA_VERSION = 1
 }
+
+@Serializable
+private data class CurrencyRatesFileDto(
+    val schemaVersion: Int,
+    val provider: CurrencyRateProviderDto,
+    val sourceUrl: String,
+    val downloadedAt: String,
+    val rateDate: String,
+    val base: String,
+    val rates: Map<String, String>
+)
+
+@Serializable
+private data class CurrencyRateProviderDto(val id: String, val name: String)
