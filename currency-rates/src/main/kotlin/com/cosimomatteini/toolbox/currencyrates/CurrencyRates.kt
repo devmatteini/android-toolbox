@@ -27,9 +27,7 @@ value class CurrencyCode private constructor(val value: String) {
     }
 }
 
-enum class CurrencyRateProvider(val id: String, val displayName: String) {
-    EuropeanCentralBank(CURRENCY_RATES_PROVIDER_ID, CURRENCY_RATES_PROVIDER_NAME)
-}
+data class CurrencyRateProvider(val id: String, val name: String)
 
 @ConsistentCopyVisibility
 data class CurrencyRates private constructor(
@@ -49,9 +47,6 @@ data class CurrencyRates private constructor(
             base: CurrencyCode,
             rates: Map<CurrencyCode, BigDecimal>
         ): CurrencyRates {
-            require(provider == CurrencyRateProvider.EuropeanCentralBank) {
-                "Currency-rates provider must be $CURRENCY_RATES_PROVIDER_ID"
-            }
             require(base == CurrencyCode.EUR) {
                 "Currency-rates base must be ${CurrencyCode.EUR.value}"
             }
@@ -94,14 +89,8 @@ object CurrencyRatesCodec {
         require(schemaVersion == SCHEMA_VERSION) {
             "Unsupported currency-rates schema version: $schemaVersion"
         }
-        require(provider.id == CURRENCY_RATES_PROVIDER_ID) {
-            "Currency-rates provider must be $CURRENCY_RATES_PROVIDER_ID"
-        }
-        require(provider.name == CURRENCY_RATES_PROVIDER_NAME) {
-            "Currency-rates provider name is invalid"
-        }
         return CurrencyRates.create(
-            provider = CurrencyRateProvider.EuropeanCentralBank,
+            provider = CurrencyRateProvider(provider.id, provider.name),
             sourceUrl = URI(sourceUrl),
             downloadedAt = Instant.parse(downloadedAt),
             rateDate = LocalDate.parse(rateDate),
@@ -117,7 +106,7 @@ object CurrencyRatesCodec {
 
     private fun CurrencyRates.toDto(): CurrencyRatesFileDto = CurrencyRatesFileDto(
         schemaVersion = SCHEMA_VERSION,
-        provider = CurrencyRateProviderDto(provider.id, provider.displayName),
+        provider = CurrencyRateProviderDto(provider.id, provider.name),
         sourceUrl = sourceUrl.toString(),
         downloadedAt = downloadedAt.toString(),
         rateDate = rateDate.toString(),

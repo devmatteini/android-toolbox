@@ -7,7 +7,7 @@ import java.math.BigDecimal
 
 class ConvertCurrency(rates: CurrencyRates) {
     val units = rates.rates.map { (code, rate) -> CurrencyUnit(code, rate) }
-    val providerName = rates.provider.displayName
+    val providerName = rates.provider.name
     val rateDate = rates.rateDate
 
     fun convert(value: BigDecimal, source: CurrencyUnit, target: CurrencyUnit): BigDecimal =

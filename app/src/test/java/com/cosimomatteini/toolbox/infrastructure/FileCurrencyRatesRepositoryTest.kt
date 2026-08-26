@@ -36,7 +36,7 @@ class FileCurrencyRatesRepositoryTest {
     }
 
     private fun rates(rate: String) = CurrencyRates.create(
-        provider = CurrencyRateProvider.EuropeanCentralBank,
+        provider = CurrencyRateProvider("ECB", "European Central Bank"),
         sourceUrl = URI("https://example.test/rates"),
         downloadedAt = Instant.parse("2026-08-25T12:00:00Z"),
         rateDate = LocalDate.parse("2026-08-25"),

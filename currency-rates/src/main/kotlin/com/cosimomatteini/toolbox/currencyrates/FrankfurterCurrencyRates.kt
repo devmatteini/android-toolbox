@@ -14,7 +14,10 @@ data class FrankfurterCurrencyRates(
 ) {
     fun toCurrencyRates(sourceUrl: URI, downloadedAt: Instant): CurrencyRates =
         CurrencyRates.create(
-            provider = CurrencyRateProvider.EuropeanCentralBank,
+            provider = CurrencyRateProvider(
+                CURRENCY_RATES_PROVIDER_ID,
+                CURRENCY_RATES_PROVIDER_NAME
+            ),
             sourceUrl = sourceUrl,
             downloadedAt = downloadedAt,
             rateDate = rateDate,
