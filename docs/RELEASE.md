@@ -2,19 +2,17 @@
 
 Steps to create a new release of `Toolbox`:
 
-1. Pull remote changes with `git pull --rebase`.
-2. Compile and run tests with `make check`.
+1. Pull remote changes with `git pull --rebase`
+2. Compile and run tests with `make check`
 3. Update [CHANGELOG.md](../CHANGELOG.md) with new release changes and run
    `git add CHANGELOG.md && git commit -m "changelog: update for release <version>"`
-4. Make sure [README.md](../README.md) is updated.
-5. Bump the version in `app/build.gradle.kts`.
-    - Increment `versionCode` by 1.
-    - Set `versionName` to the new Semver version.
-6. Run `git add app/build.gradle.kts && git commit -m "release <version>"`.
-7. Push to remote with `git push`.
-8. Create a signed tag with `git tag -s <version> -m "release <version>"`.
-9. Wait for CI to pass, then push the tag with `git push --tags`.
-10. Wait for the release workflow to finish. It creates the GitHub release and uploads the signed
-    APK.
-
-The release commit message becomes the GitHub release notes.
+4. Make sure [README.md](../README.md) is updated
+5. Bump version in `app/build.gradle.kts`
+    - `versionCode`: increment by 1
+    - `versionName`: new version following Semver
+6. Run `git add app/build.gradle.kts && git commit -m "release <version>"`
+7. Push to remote with `git push`
+8. Create signed tag `git tag -s <version> -m "See CHANGELOG.md for more details"`
+9. Wait CI to pass all checks and then run `git push --tags`
+10. Wait release workflow to complete and update release page by copying
+    from [CHANGELOG.md](../CHANGELOG.md) the release notes
