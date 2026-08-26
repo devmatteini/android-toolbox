@@ -268,12 +268,12 @@
 - Clear the refresh message after its toast is displayed.
 - Do not replay a prior refresh toast after navigation or activity recreation.
 
-## 21. Disable App Data Backup and Transfer
+## 21. Disable App Data Backup and Transfer (Done)
 
 - Exclude app data from cloud backup and device transfer.
 - Remove obsolete pre-Android-12 backup configuration because the minimum SDK is API 35.
 
-## 22. Remove Unused Resources and Dependencies
+## 22. Remove Unused Resources and Dependencies (DONE)
 
 - Remove unused color resources.
 - Remove unused direct AndroidX dependencies after build verification.
