@@ -11,7 +11,3 @@ interface CurrencyRatesRepository {
 
     fun save(rates: CurrencyRatesFile)
 }
-
-interface CurrencyExchangeRates {
-    suspend fun load(): CurrencyRatesFile
-}
