@@ -25,7 +25,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -48,6 +47,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cosimomatteini.toolbox.R
 import com.cosimomatteini.toolbox.domain.CardinalDirection
 import com.cosimomatteini.toolbox.domain.CompassHeading
@@ -64,7 +65,10 @@ import kotlin.math.sin
 @Composable
 fun CompassScreen(observeCompass: ObserveCompass, onBack: () -> Unit) {
     val readings = remember(observeCompass) { observeCompass() }
-    val reading by readings.collectAsState(initial = null)
+    val reading by readings.collectAsStateWithLifecycle(
+        initialValue = null,
+        minActiveState = Lifecycle.State.STARTED
+    )
 
     CompassScreenContent(reading = reading, onBack = onBack)
 }

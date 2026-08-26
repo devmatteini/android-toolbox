@@ -35,7 +35,7 @@ magnetic-north sensor.
 - It shows device pitch and roll, plus magnetic-field strength and accuracy when the device has a
   magnetic-field sensor. A missing magnetic-field sensor does not disable the compass.
 - The app shows an unavailable state when a rotation-vector sensor is unavailable.
-- Sensor listeners are registered only while the compass is visible.
+- Sensor listeners are registered only while the Compass screen lifecycle is at least `STARTED`.
 
 ## Technical Decisions
 

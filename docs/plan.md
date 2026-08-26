@@ -241,7 +241,7 @@
 - Preserve the entered value while converting its decimal separator to the new locale.
 - Recalculate converted and equivalence values using the new locale.
 
-## 16. Stop Compass Sensors in Background
+## 16. Stop Compass Sensors in Background (Done)
 
 - Collect compass readings only while the Compass screen lifecycle is at least `STARTED`.
 - Stop sensor listeners while the app is backgrounded.
