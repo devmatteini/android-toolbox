@@ -27,7 +27,7 @@ import com.cosimomatteini.toolbox.ui.VolumeScreen
 import com.cosimomatteini.toolbox.ui.theme.ToolboxTheme
 
 class MainActivity : ComponentActivity() {
-    private val appContainer by lazy { ToolboxAppContainer(applicationContext) }
+    private val appContainer by lazy { ToolboxAppContainer(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

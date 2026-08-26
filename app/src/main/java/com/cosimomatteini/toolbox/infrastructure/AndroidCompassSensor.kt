@@ -5,6 +5,7 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.view.Surface
 import com.cosimomatteini.toolbox.domain.CompassHeading
 import com.cosimomatteini.toolbox.domain.CompassSensor
 import com.cosimomatteini.toolbox.domain.CompassSensorReading
@@ -18,7 +19,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.flowOf
 
-class AndroidCompassSensor(context: Context) : CompassSensor {
+class AndroidCompassSensor(private val context: Context) : CompassSensor {
     private val sensorManager = context.getSystemService(SensorManager::class.java)
     private val rotationVectorSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
     private val magneticFieldSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
@@ -46,11 +47,13 @@ class AndroidCompassSensor(context: Context) : CompassSensor {
 
             val orientationListener = object : SensorEventListener {
                 private val rotationMatrix = FloatArray(9)
+                private val displayRotationMatrix = FloatArray(9)
                 private val orientation = FloatArray(3)
 
                 override fun onSensorChanged(event: SensorEvent) {
                     SensorManager.getRotationMatrixFromVector(rotationMatrix, event.values)
-                    SensorManager.getOrientation(rotationMatrix, orientation)
+                    remapForDisplayRotation(rotationMatrix, displayRotationMatrix)
+                    SensorManager.getOrientation(displayRotationMatrix, orientation)
                     latestOrientation = CompassOrientation(
                         heading = normalizeHeading(
                             Math.toDegrees(orientation[0].toDouble()).toFloat()
@@ -111,6 +114,16 @@ class AndroidCompassSensor(context: Context) : CompassSensor {
             }
         }.conflate()
     }
+
+    private fun remapForDisplayRotation(rotationMatrix: FloatArray, output: FloatArray) {
+        val displayRotation = context.display?.rotation ?: Surface.ROTATION_0
+        SensorManager.remapCoordinateSystem(
+            rotationMatrix,
+            displayRotation.xAxis(),
+            displayRotation.yAxis(),
+            output
+        )
+    }
 }
 
 private data class CompassOrientation(
@@ -124,4 +137,18 @@ private fun Int.toMagneticAccuracy(): MagneticAccuracy = when (this) {
     SensorManager.SENSOR_STATUS_ACCURACY_MEDIUM -> MagneticAccuracy.Medium
     SensorManager.SENSOR_STATUS_ACCURACY_LOW -> MagneticAccuracy.Low
     else -> MagneticAccuracy.Unreliable
+}
+
+private fun Int.xAxis(): Int = when (this) {
+    Surface.ROTATION_90 -> SensorManager.AXIS_Y
+    Surface.ROTATION_180 -> SensorManager.AXIS_MINUS_X
+    Surface.ROTATION_270 -> SensorManager.AXIS_MINUS_Y
+    else -> SensorManager.AXIS_X
+}
+
+private fun Int.yAxis(): Int = when (this) {
+    Surface.ROTATION_90 -> SensorManager.AXIS_MINUS_X
+    Surface.ROTATION_180 -> SensorManager.AXIS_MINUS_Y
+    Surface.ROTATION_270 -> SensorManager.AXIS_X
+    else -> SensorManager.AXIS_Y
 }

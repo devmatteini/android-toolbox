@@ -247,7 +247,7 @@
 - Stop sensor listeners while the app is backgrounded.
 - Resume sensor collection when the Compass screen returns to the foreground.
 
-## 17. Remap Compass for Tablet Display Rotation
+## 17. Remap Compass for Tablet Display Rotation (Done)
 
 - Remap rotation-vector coordinates using the current display rotation before deriving heading, pitch, and roll.
 - Support phones and tablets with landscape-natural displays while keeping the app portrait-only.
