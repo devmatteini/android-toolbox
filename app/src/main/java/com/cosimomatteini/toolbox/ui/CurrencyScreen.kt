@@ -107,7 +107,7 @@ fun CurrencyScreen(currencyRates: CurrencyRates, onBack: () -> Unit) {
                     formatSourceDate(convertCurrency.rateDate, locale)
                 ),
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                style = MaterialTheme.typography.bodyLarge,
+                style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.padding(horizontal = 4.dp)
             )
         }
