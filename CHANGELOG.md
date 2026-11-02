@@ -7,6 +7,12 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+[0.2.0] - 2026-11-03
+
+### Added
+
+- Settings screen to change tools default units
+
 [0.1.0] - 2026-08-26
 
 Initial release of Toolbox.
