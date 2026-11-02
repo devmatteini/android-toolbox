@@ -11,7 +11,7 @@ magnetic-north sensor.
 - Show a magnetic-north compass heading, eight-point direction, level, and magnetic-field
   diagnostics when available.
 - Work without network access.
-- Keep converter state in memory only.
+- Persist configurable default unit pairs while keeping active converter state in memory only.
 - Refresh packaged ECB currency reference rates on demand from the Currency toolbar.
 
 ## UX
@@ -19,6 +19,7 @@ magnetic-north sensor.
 ### Converters
 
 - Users select source and target units, enter a source value, and read the converted value.
+- Settings stores the source and target defaults used the next time each converter opens.
 - The numeric keypad accepts the active locale's decimal separator.
 - Swap exchanges the selected units and promotes the converted value to editable input.
 
@@ -92,10 +93,11 @@ Do not depend on `infrastructure` from `domain` or `features`.
 
 - All tools work offline with packaged or persisted currency rates. Currency refresh runs only
   after the user presses its toolbar action, never in the background.
-- Converters do not persist values or unit selections. Their state is ephemeral and exists only in
-  memory while the app process is alive.
-- Currency rates are the only persisted data. Runtime rates use the packaged JSON schema and are
-  atomically replaced after validation.
+- Preferences DataStore persists one default source/target pair per converter. Missing or unknown
+  identifiers fall back to the built-in pair.
+- A converter receives the persisted pair when opened. Its entered value and subsequent unit
+  changes remain ephemeral and never overwrite those defaults.
+- Runtime currency rates use the packaged JSON schema and are atomically replaced after validation.
 - Do not add Room or another persistence layer unless a product requirement needs persistence.
 
 ### Compass Platform

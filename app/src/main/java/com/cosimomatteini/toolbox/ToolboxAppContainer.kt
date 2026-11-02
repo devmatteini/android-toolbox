@@ -12,11 +12,13 @@ import com.cosimomatteini.toolbox.features.ObserveCompass
 import com.cosimomatteini.toolbox.features.RefreshCurrencyRates
 import com.cosimomatteini.toolbox.features.Tools
 import com.cosimomatteini.toolbox.infrastructure.AndroidCompassSensor
+import com.cosimomatteini.toolbox.infrastructure.DataStoreConverterDefaultsStore
 import com.cosimomatteini.toolbox.infrastructure.FileCurrencyRatesRepository
 import com.cosimomatteini.toolbox.infrastructure.FrankfurterCurrencyExchangeRates
 import com.cosimomatteini.toolbox.infrastructure.PackagedCurrencyRates
 
 class ToolboxAppContainer(context: Context) {
+    val converterDefaultsStore = DataStoreConverterDefaultsStore(context)
     val convertArea = ConvertArea()
     private val defaultCurrencyRates = PackagedCurrencyRates(context.assets)
     private val fileCurrencyRates = FileCurrencyRatesRepository(context.filesDir)

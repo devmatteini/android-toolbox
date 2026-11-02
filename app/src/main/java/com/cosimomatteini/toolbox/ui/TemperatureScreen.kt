@@ -12,14 +12,19 @@ import com.cosimomatteini.toolbox.domain.TemperatureUnit
 import com.cosimomatteini.toolbox.features.ConvertTemperature
 
 @Composable
-fun TemperatureScreen(convertTemperature: ConvertTemperature, onBack: () -> Unit) {
+fun TemperatureScreen(
+    convertTemperature: ConvertTemperature,
+    initialUnits: UnitPair<TemperatureUnit>,
+    viewModelKey: String,
+    onBack: () -> Unit
+) {
     val viewModel = viewModel<ConverterViewModel<TemperatureUnit>>(
-        key = "temperature",
+        key = viewModelKey,
         factory = viewModelFactory {
             initializer {
                 ConverterViewModel(
-                    sourceUnit = TemperatureUnit.Celsius,
-                    targetUnit = TemperatureUnit.Fahrenheit,
+                    sourceUnit = initialUnits.source,
+                    targetUnit = initialUnits.target,
                     convert = convertTemperature::invoke
                 )
             }
@@ -44,10 +49,4 @@ fun TemperatureScreen(convertTemperature: ConvertTemperature, onBack: () -> Unit
         showSignToggle = true,
         onToggleSign = viewModel::onToggleSign
     )
-}
-
-private fun TemperatureUnit.labelRes(): Int = when (this) {
-    TemperatureUnit.Celsius -> R.string.temperature_unit_celsius
-    TemperatureUnit.Fahrenheit -> R.string.temperature_unit_fahrenheit
-    TemperatureUnit.Kelvin -> R.string.temperature_unit_kelvin
 }

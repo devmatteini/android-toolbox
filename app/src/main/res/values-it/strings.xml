@@ -2,6 +2,14 @@
     <string name="app_name">Toolbox</string>
     <string name="app_version">Versione %1$s</string>
     <string name="home_more_actions">Apri altre azioni</string>
+    <string name="settings_menu">Impostazioni</string>
+    <string name="settings_title">Impostazioni</string>
+    <string name="settings_back">Torna agli strumenti</string>
+    <string name="settings_loading">Caricamento impostazioni</string>
+    <string name="settings_to">a</string>
+    <string name="settings_source_selector">Unità di partenza per %1$s</string>
+    <string name="settings_target_selector">Unità di arrivo per %1$s</string>
+    <string name="settings_save_failed">Impossibile salvare l’impostazione.</string>
     <string name="tools_title">Strumenti</string>
     <string name="tool_length">Lunghezza</string>
     <string name="tool_mass">Peso</string>

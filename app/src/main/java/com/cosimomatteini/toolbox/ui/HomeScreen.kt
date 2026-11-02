@@ -24,6 +24,7 @@ import androidx.compose.material.icons.outlined.Straighten
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -55,7 +56,12 @@ import com.cosimomatteini.toolbox.ui.theme.ToolboxTheme
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun HomeScreen(uiState: HomeUiState, onToolClick: (Tool) -> Unit, modifier: Modifier = Modifier) {
+fun HomeScreen(
+    uiState: HomeUiState,
+    onToolClick: (Tool) -> Unit,
+    onSettingsClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     var menuExpanded by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -74,6 +80,13 @@ fun HomeScreen(uiState: HomeUiState, onToolClick: (Tool) -> Unit, modifier: Modi
                         expanded = menuExpanded,
                         onDismissRequest = { menuExpanded = false }
                     ) {
+                        DropdownMenuItem(
+                            text = { Text(stringResource(R.string.settings_menu)) },
+                            onClick = {
+                                menuExpanded = false
+                                onSettingsClick()
+                            }
+                        )
                         Text(
                             text = stringResource(R.string.app_version, BuildConfig.VERSION_NAME),
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -175,7 +188,8 @@ private fun HomeScreenNarrowPreview() {
     ToolboxTheme(dynamicColor = false) {
         HomeScreen(
             uiState = HomeUiState(Tools()()),
-            onToolClick = {}
+            onToolClick = {},
+            onSettingsClick = {}
         )
     }
 }
@@ -186,7 +200,8 @@ private fun HomeScreenWidePreview() {
     ToolboxTheme(dynamicColor = false) {
         HomeScreen(
             uiState = HomeUiState(Tools()()),
-            onToolClick = {}
+            onToolClick = {},
+            onSettingsClick = {}
         )
     }
 }

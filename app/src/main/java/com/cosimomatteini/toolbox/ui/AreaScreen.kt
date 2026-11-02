@@ -12,14 +12,19 @@ import com.cosimomatteini.toolbox.domain.AreaUnit
 import com.cosimomatteini.toolbox.features.ConvertArea
 
 @Composable
-fun AreaScreen(convertArea: ConvertArea, onBack: () -> Unit) {
+fun AreaScreen(
+    convertArea: ConvertArea,
+    initialUnits: UnitPair<AreaUnit>,
+    viewModelKey: String,
+    onBack: () -> Unit
+) {
     val viewModel = viewModel<ConverterViewModel<AreaUnit>>(
-        key = "area",
+        key = viewModelKey,
         factory = viewModelFactory {
             initializer {
                 ConverterViewModel(
-                    sourceUnit = AreaUnit.SquareMeter,
-                    targetUnit = AreaUnit.SquareKilometer,
+                    sourceUnit = initialUnits.source,
+                    targetUnit = initialUnits.target,
                     convert = convertArea::invoke
                 )
             }
@@ -42,16 +47,4 @@ fun AreaScreen(convertArea: ConvertArea, onBack: () -> Unit) {
         onClear = viewModel::onClear,
         onSwap = viewModel::onSwap
     )
-}
-
-private fun AreaUnit.labelRes(): Int = when (this) {
-    AreaUnit.SquareCentimeter -> R.string.area_unit_square_centimeter
-    AreaUnit.SquareMeter -> R.string.area_unit_square_meter
-    AreaUnit.SquareKilometer -> R.string.area_unit_square_kilometer
-    AreaUnit.Hectare -> R.string.area_unit_hectare
-    AreaUnit.SquareInch -> R.string.area_unit_square_inch
-    AreaUnit.SquareFoot -> R.string.area_unit_square_foot
-    AreaUnit.SquareYard -> R.string.area_unit_square_yard
-    AreaUnit.SquareMile -> R.string.area_unit_square_mile
-    AreaUnit.Acre -> R.string.area_unit_acre
 }

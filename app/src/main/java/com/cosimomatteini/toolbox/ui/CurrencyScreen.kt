@@ -45,10 +45,12 @@ import java.util.Locale
 fun CurrencyScreen(
     loadCurrencyRates: LoadCurrencyRates,
     refreshCurrencyRates: RefreshCurrencyRates,
+    initialUnitCodes: UnitPair<CurrencyUnit>,
+    viewModelKey: String,
     onBack: () -> Unit
 ) {
     val ratesViewModel = viewModel<CurrencyRatesViewModel>(
-        key = "currencyRates",
+        key = "$viewModelKey-rates",
         factory = viewModelFactory {
             initializer { CurrencyRatesViewModel(loadCurrencyRates, refreshCurrencyRates) }
         }
@@ -62,13 +64,19 @@ fun CurrencyScreen(
     val refreshMessage = ratesUiState.message?.let { stringResource(it.stringRes) }
     val snackbarHostState = remember { SnackbarHostState() }
     val convertCurrency = remember(rates) { ConvertCurrency(rates) }
-    val sourceUnit = convertCurrency.units.single { it.code == CurrencyCode.EUR }
-    val targetUnit = convertCurrency.units.singleOrNull { it.code == CurrencyCode.USD }
-        ?: sourceUnit
+    val fallbackSource = convertCurrency.units.single { it.code == CurrencyCode.EUR }
+    val fallbackTarget = convertCurrency.units.singleOrNull { it.code == CurrencyCode.USD }
+        ?: fallbackSource
+    val sourceUnit = convertCurrency.units.singleOrNull {
+        it.code == initialUnitCodes.source.code
+    } ?: fallbackSource
+    val targetUnit = convertCurrency.units.singleOrNull {
+        it.code == initialUnitCodes.target.code
+    } ?: fallbackTarget
     val locale = LocalConfiguration.current.locales[0]
     val units = orderedCurrencyUnits(convertCurrency.units, locale)
     val viewModel = viewModel<ConverterViewModel<CurrencyUnit>>(
-        key = "currency",
+        key = "$viewModelKey-converter",
         factory = viewModelFactory {
             initializer {
                 ConverterViewModel(

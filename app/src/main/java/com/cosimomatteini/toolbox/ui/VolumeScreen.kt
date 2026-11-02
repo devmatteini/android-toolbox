@@ -12,14 +12,19 @@ import com.cosimomatteini.toolbox.domain.VolumeUnit
 import com.cosimomatteini.toolbox.features.ConvertVolume
 
 @Composable
-fun VolumeScreen(convertVolume: ConvertVolume, onBack: () -> Unit) {
+fun VolumeScreen(
+    convertVolume: ConvertVolume,
+    initialUnits: UnitPair<VolumeUnit>,
+    viewModelKey: String,
+    onBack: () -> Unit
+) {
     val viewModel = viewModel<ConverterViewModel<VolumeUnit>>(
-        key = "volume",
+        key = viewModelKey,
         factory = viewModelFactory {
             initializer {
                 ConverterViewModel(
-                    sourceUnit = VolumeUnit.Millilitre,
-                    targetUnit = VolumeUnit.Litre,
+                    sourceUnit = initialUnits.source,
+                    targetUnit = initialUnits.target,
                     convert = convertVolume::invoke
                 )
             }
@@ -42,14 +47,4 @@ fun VolumeScreen(convertVolume: ConvertVolume, onBack: () -> Unit) {
         onClear = viewModel::onClear,
         onSwap = viewModel::onSwap
     )
-}
-
-private fun VolumeUnit.labelRes(): Int = when (this) {
-    VolumeUnit.Millilitre -> R.string.volume_unit_millilitre
-    VolumeUnit.Litre -> R.string.volume_unit_litre
-    VolumeUnit.CubicMeter -> R.string.volume_unit_cubic_meter
-    VolumeUnit.FluidOunce -> R.string.volume_unit_fluid_ounce
-    VolumeUnit.Pint -> R.string.volume_unit_pint
-    VolumeUnit.Quart -> R.string.volume_unit_quart
-    VolumeUnit.ImperialGallon -> R.string.volume_unit_imperial_gallon
 }

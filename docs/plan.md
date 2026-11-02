@@ -277,3 +277,78 @@
 
 - Remove unused color resources.
 - Remove unused direct AndroidX dependencies after build verification.
+
+## 23. Add Persistent Converter Default Units (Done)
+
+- Add a Settings entry to the Home overflow menu while retaining the app-version information.
+- Close the overflow menu when Settings is selected and navigate to a new `Settings` route.
+- Add back navigation from Settings to Home through both the app-bar button and the system back
+  action.
+- Keep the existing conversion domain, unit definitions, and conversion features unchanged:
+  `ConverterViewModel` already accepts its initial source and target units.
+- Use the existing converter defaults as the initial values:
+  - Length: Meter to Kilometer.
+  - Currency: EUR to USD.
+  - Speed: Meters per second to Kilometers per hour.
+  - Temperature: Celsius to Fahrenheit.
+  - Mass/Weight: Gram to Kilogram.
+  - Volume: Millilitre to Litre.
+  - Area: Square meter to Square kilometer.
+- Add a small Preferences DataStore-backed defaults store in `infrastructure/` and wire it through
+  `ToolboxAppContainer`; do not add domain models, new conversion features, Room, or Hilt.
+- Let the Settings/navigation UI translate persisted identifiers to the existing typed units before
+  passing the selected pair to each converter screen.
+- Persist source and target independently with stable category/unit identifiers rather than
+  localized labels or symbols.
+- Map missing, unknown, or invalid persisted identifiers to that category's initial pair so a
+  preferences schema change or corrupted entry cannot prevent the app from opening.
+- Expose persisted defaults as observable UI state and write each selection immediately; no
+  explicit Save button is required.
+- Add `SettingsViewModel`, immutable loading/content UI state, and `SettingsScreen` based on the
+  supplied `settings.png` mockup:
+  - Material 3 top app bar titled Settings.
+  - Vertically scrollable sections in this order: Length, Currency, Speed, Temperature, Weight,
+    Volume, and Area.
+  - One source selector, a localized “to” label, and one target selector per section.
+  - Responsive wrapping/stacking where needed so long localized unit names remain usable on narrow
+    screens and with large font scales.
+  - Accessible selector labels that include the category and source/target role.
+- Reuse the converter unit-selection UI and unit-label mappings instead of maintaining duplicate
+  menus in Settings; extract currently screen-private selectors/label mappings where necessary.
+- Populate each non-currency selector from the same unit list used by its converter.
+- Load Currency options from the existing persisted-or-packaged rates source on `Dispatchers.IO`,
+  without triggering a network refresh from Settings.
+- Display Currency options with the same localized names, codes, and locale-aware ordering used by
+  the Currency converter.
+- If a saved currency is absent from the currently loaded rates, fall back to EUR for the source
+  and USD for the target, or EUR for both when USD is unavailable, and persist the repaired pair.
+- Add localized English and Italian strings for the Settings menu item, screen title, source/target
+  selector descriptions, connector text, loading state, and any new accessibility descriptions.
+- Pass each persisted pair into its converter ViewModel factory instead of hard-coding units in the
+  individual converter screens; resolve persisted currency codes against the currently loaded
+  `CurrencyUnit` instances before creating the Currency converter ViewModel.
+- Do not replace selections while a converter is already open. Treat settings as defaults for the
+  next opening of that tool.
+- Give every converter navigation entry a fresh ViewModel key/instance so returning Home and
+  reopening a tool applies the latest persisted defaults instead of restoring that tool's prior
+  in-memory unit selections and input.
+- Do not instantiate a converter ViewModel until its persisted defaults are available; show the
+  existing loading pattern where asynchronous loading is required.
+- Keep user changes made inside a converter ephemeral: changing units there must not modify the
+  saved defaults.
+- Add tests for:
+  - Initial pairs matching all current hard-coded defaults.
+  - DataStore round trips and fallback from missing/unknown identifiers.
+  - Updating only the selected category and source/target side.
+  - Settings state loading, selection updates, persistence failures, and currency fallback.
+  - Home overflow navigation and Settings back navigation.
+  - Localized selector rendering and accessibility semantics.
+  - A converter using saved defaults on first open and the latest defaults after close/reopen.
+  - Converter-local unit changes not altering persisted defaults.
+- Update `docs/ARCHITECTURE.md` to document the DataStore-backed converter defaults and the
+  distinction between persistent defaults and ephemeral converter values/current selections.
+- Run `./gradlew ktlintFormat` before lint, then run the unit tests, Compose UI tests, lint, and a
+  debug build.
+- Manually verify that all seven pairs survive process termination and a fresh app launch, every
+  converter opens with its configured pair, Currency still works offline, and invalid stored values
+  recover without a crash.

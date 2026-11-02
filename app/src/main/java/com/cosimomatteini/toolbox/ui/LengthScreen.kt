@@ -12,14 +12,19 @@ import com.cosimomatteini.toolbox.domain.LengthUnit
 import com.cosimomatteini.toolbox.features.ConvertLength
 
 @Composable
-fun LengthScreen(convertLength: ConvertLength, onBack: () -> Unit) {
+fun LengthScreen(
+    convertLength: ConvertLength,
+    initialUnits: UnitPair<LengthUnit>,
+    viewModelKey: String,
+    onBack: () -> Unit
+) {
     val viewModel = viewModel<ConverterViewModel<LengthUnit>>(
-        key = "length",
+        key = viewModelKey,
         factory = viewModelFactory {
             initializer {
                 ConverterViewModel(
-                    sourceUnit = LengthUnit.Meter,
-                    targetUnit = LengthUnit.Kilometer,
+                    sourceUnit = initialUnits.source,
+                    targetUnit = initialUnits.target,
                     convert = convertLength::invoke
                 )
             }
@@ -42,15 +47,4 @@ fun LengthScreen(convertLength: ConvertLength, onBack: () -> Unit) {
         onClear = viewModel::onClear,
         onSwap = viewModel::onSwap
     )
-}
-
-private fun LengthUnit.labelRes(): Int = when (this) {
-    LengthUnit.Millimeter -> R.string.length_unit_millimeter
-    LengthUnit.Centimeter -> R.string.length_unit_centimeter
-    LengthUnit.Meter -> R.string.length_unit_meter
-    LengthUnit.Kilometer -> R.string.length_unit_kilometer
-    LengthUnit.Inch -> R.string.length_unit_inch
-    LengthUnit.Foot -> R.string.length_unit_foot
-    LengthUnit.Yard -> R.string.length_unit_yard
-    LengthUnit.Mile -> R.string.length_unit_mile
 }

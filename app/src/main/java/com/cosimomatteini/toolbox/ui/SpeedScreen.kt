@@ -12,14 +12,19 @@ import com.cosimomatteini.toolbox.domain.SpeedUnit
 import com.cosimomatteini.toolbox.features.ConvertSpeed
 
 @Composable
-fun SpeedScreen(convertSpeed: ConvertSpeed, onBack: () -> Unit) {
+fun SpeedScreen(
+    convertSpeed: ConvertSpeed,
+    initialUnits: UnitPair<SpeedUnit>,
+    viewModelKey: String,
+    onBack: () -> Unit
+) {
     val viewModel = viewModel<ConverterViewModel<SpeedUnit>>(
-        key = "speed",
+        key = viewModelKey,
         factory = viewModelFactory {
             initializer {
                 ConverterViewModel(
-                    sourceUnit = SpeedUnit.MetersPerSecond,
-                    targetUnit = SpeedUnit.KilometersPerHour,
+                    sourceUnit = initialUnits.source,
+                    targetUnit = initialUnits.target,
                     convert = convertSpeed::invoke
                 )
             }
@@ -42,11 +47,4 @@ fun SpeedScreen(convertSpeed: ConvertSpeed, onBack: () -> Unit) {
         onClear = viewModel::onClear,
         onSwap = viewModel::onSwap
     )
-}
-
-private fun SpeedUnit.labelRes(): Int = when (this) {
-    SpeedUnit.MetersPerSecond -> R.string.speed_unit_meters_per_second
-    SpeedUnit.KilometersPerHour -> R.string.speed_unit_kilometers_per_hour
-    SpeedUnit.FeetPerSecond -> R.string.speed_unit_feet_per_second
-    SpeedUnit.MilesPerHour -> R.string.speed_unit_miles_per_hour
 }

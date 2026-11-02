@@ -2,6 +2,14 @@
     <string name="app_name">Toolbox</string>
     <string name="app_version">Version %1$s</string>
     <string name="home_more_actions">Open more actions</string>
+    <string name="settings_menu">Settings</string>
+    <string name="settings_title">Settings</string>
+    <string name="settings_back">Back to tools</string>
+    <string name="settings_loading">Loading settings</string>
+    <string name="settings_to">to</string>
+    <string name="settings_source_selector">%1$s source unit</string>
+    <string name="settings_target_selector">%1$s target unit</string>
+    <string name="settings_save_failed">Could not save setting.</string>
     <string name="tools_title">Tools</string>
     <string name="tool_length">Length</string>
     <string name="tool_mass">Weight</string>

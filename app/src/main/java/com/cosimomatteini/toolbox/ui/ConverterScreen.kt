@@ -54,6 +54,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -241,12 +242,14 @@ private fun <U : ConverterUnit> ConversionCard(
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun <U : ConverterUnit> UnitSelector(
+internal fun <U : ConverterUnit> UnitSelector(
     label: String,
     selected: U,
     units: List<U>,
     unitLabel: @Composable (U) -> String,
-    onUnitSelected: (U) -> Unit
+    onUnitSelected: (U) -> Unit,
+    modifier: Modifier = Modifier,
+    textStyle: TextStyle = MaterialTheme.typography.titleLarge
 ) {
     var expanded by remember { mutableStateOf(false) }
     var query by remember { mutableStateOf("") }
@@ -255,13 +258,18 @@ private fun <U : ConverterUnit> UnitSelector(
     val unitOptions = units.map { unit -> unit to unitLabel(unit) }
     val filteredOptions = filterUnitOptions(unitOptions, query)
 
-    Box {
+    Box(modifier = modifier) {
         TextButton(
             onClick = { expanded = true },
             contentPadding = PaddingValues(0.dp),
             modifier = Modifier.semantics { contentDescription = "$label $selectedLabel" }
         ) {
-            Text(text = selectedLabel, style = MaterialTheme.typography.titleLarge)
+            Text(
+                text = selectedLabel,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                style = textStyle
+            )
             Icon(
                 Icons.Filled.KeyboardArrowDown,
                 contentDescription = null,
@@ -350,6 +358,7 @@ private fun Keypad(
     showSignToggle: Boolean,
     onToggleSign: () -> Unit
 ) {
+    val locale = LocalConfiguration.current.locales[0]
     val swapLabel = stringResource(R.string.converter_swap)
     val clearLabel = stringResource(R.string.converter_clear)
     val deleteLabel = stringResource(R.string.converter_delete)
@@ -393,7 +402,7 @@ private fun Keypad(
             DigitButton(0, onDigit)
             KeypadButton(onClick = onDecimal, contentDescription = decimalLabel) {
                 Text(
-                    decimalSeparator(Locale.getDefault()).toString(),
+                    decimalSeparator(locale).toString(),
                     style = MaterialTheme.typography.headlineMedium
                 )
             }

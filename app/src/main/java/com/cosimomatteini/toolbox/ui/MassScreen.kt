@@ -12,14 +12,19 @@ import com.cosimomatteini.toolbox.domain.MassUnit
 import com.cosimomatteini.toolbox.features.ConvertMass
 
 @Composable
-fun MassScreen(convertMass: ConvertMass, onBack: () -> Unit) {
+fun MassScreen(
+    convertMass: ConvertMass,
+    initialUnits: UnitPair<MassUnit>,
+    viewModelKey: String,
+    onBack: () -> Unit
+) {
     val viewModel = viewModel<ConverterViewModel<MassUnit>>(
-        key = "mass",
+        key = viewModelKey,
         factory = viewModelFactory {
             initializer {
                 ConverterViewModel(
-                    sourceUnit = MassUnit.Gram,
-                    targetUnit = MassUnit.Kilogram,
+                    sourceUnit = initialUnits.source,
+                    targetUnit = initialUnits.target,
                     convert = convertMass::invoke
                 )
             }
@@ -42,13 +47,4 @@ fun MassScreen(convertMass: ConvertMass, onBack: () -> Unit) {
         onClear = viewModel::onClear,
         onSwap = viewModel::onSwap
     )
-}
-
-private fun MassUnit.labelRes(): Int = when (this) {
-    MassUnit.Milligram -> R.string.mass_unit_milligram
-    MassUnit.Gram -> R.string.mass_unit_gram
-    MassUnit.Kilogram -> R.string.mass_unit_kilogram
-    MassUnit.Ounce -> R.string.mass_unit_ounce
-    MassUnit.Pound -> R.string.mass_unit_pound
-    MassUnit.Stone -> R.string.mass_unit_stone
 }
